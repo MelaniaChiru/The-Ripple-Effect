@@ -67,7 +67,7 @@ router.get("/levels/:levelId/solution", async (req, res) => {
       solutions: normalizeTiles(level.solutions)
     });
   } catch (err) {
-    res.status(500).json({ error: "***ERROR: Failed to load solution" });
+    res.status(500).json({ error: "***ERROR:Failed to load solution" });
   }
 });
 

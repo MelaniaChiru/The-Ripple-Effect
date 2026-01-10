@@ -26,3 +26,11 @@ export function normalizeTiles(tiles = []) {
     };
   });
 }
+
+//normalize solution bc solutions are just { id, position }
+export function normalizeSolutions(solutions = []) {
+  return solutions.map((s) => ({
+    id: s.id,
+    position: { r: s.position?.[0], c: s.position?.[1] }
+  }));
+}
