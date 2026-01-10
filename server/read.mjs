@@ -56,8 +56,10 @@ function parseLevels(jsonData) {
                 tile.effect
             );
         });
-        console.log("Parsed tiles:", tiles);
-        return new Level(tiles, level.solution);
+        const solution = level.solutions.map((sol) => {
+            return new Solution(sol.id, sol.position);
+        });
+        return new Level(level.levelNumber, level.gridSize, tiles, solution);
     });
 }
 
