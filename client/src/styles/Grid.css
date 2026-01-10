@@ -1,0 +1,91 @@
+#grid-section {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 24px;
+    padding: 24px;
+}
+
+#palette {
+    width: 140px;
+    background: #f3f3f3;
+    padding: 12px;
+    border-radius: 6px;
+}
+
+.palette-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    margin-bottom: 8px;
+    background: white;
+    border-radius: 4px;
+    cursor: grab;
+}
+
+#tiles {
+    display: grid;
+    background-color: #33b847;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.tile {
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #d9cda0;
+}
+
+.tile.drag-over {
+    outline: 3px dashed #ada172;
+}
+
+.tile.fixed {
+    background: #f8f9fa;
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,0.03);
+}
+
+.invalid-drop {
+    animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-3px); }
+    100% { transform: translateX(0); }
+}
+
+.empty-placeholder {
+    width: 40px;
+    height: 40px;
+    background: #ada172;
+    border-radius: 4px;
+}
+
+.tile img {
+    cursor: grab;
+}
+.tile img:active {
+    cursor: grabbing;
+}
+
+.palette-item.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.palette-count {
+    font-weight: bold;
+    margin-left: 6px;
+}

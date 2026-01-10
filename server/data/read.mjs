@@ -37,6 +37,7 @@ export async function readJSON() {
         const data = await fs.readFile(path.join(process.cwd(), filename), "utf-8");
         const jsonData = JSON.parse(data);
         parseLevels(jsonData);
+        return levels;
     } catch (error) {
         console.error("Error reading JSON file:", error);
     }
