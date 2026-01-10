@@ -7,7 +7,7 @@ function LevelSelection({ setCurrentPage }) {
   return (
     <div className="level-selection-screen">
       <button className="back-arrow" onClick={() => setCurrentPage("homepage")}>
-        &#11013; Back
+        <span>&#11013;</span> <span>Back</span>
       </button>
 
       <div className="levels-container">

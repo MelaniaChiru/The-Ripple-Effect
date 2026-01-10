@@ -92,6 +92,13 @@
 	width: 50%;
 }
 
+.back-arrow{
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	font-size: 1.25rem;
+}
+
 @media (max-width: 800px){
 	.left-side { 
 		margin-left: 20px; 
