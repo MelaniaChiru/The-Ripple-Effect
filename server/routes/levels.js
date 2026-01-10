@@ -28,7 +28,7 @@ router.get("/levels", async (req, res) => {
 
 /*
 *GET /api/levels/:levelId
-* For the play page and return tiles and solutions for that sprcific level
+* For the play page and return graid size, tiles and solutions for that sprcific level
 */
 router.get("/levels/:levelId", async (req, res) => {
   try {
@@ -36,22 +36,27 @@ router.get("/levels/:levelId", async (req, res) => {
     const data = await readInfoJson();
     const levels = data.levels || [];
 
-    const level = levels[levelId - 1];
-    if (!level) return res.status(404).json({ error: "Level not found" });
+    // here find by levelNumber 1st and then fallback to array index
+    const level = levels.find((l) => Number(l.levelNumber) === levelId) || levels[levelId - 1];
+
+    if (!level) {
+      return res.status(404).json({ error: "***ERROR: Level not found***" });
+    }
 
     res.json({
-      id: levelId,
+      id: level.levelNumber ?? levelId,
+      gridSize: level.gridSize,
       tiles: normalizeTiles(level.tiles),
-      solutions: normalizeTiles(level.solutions)
+      solutions: normalizeSolutions(level.solutions)
     });
   } catch (err) {
-    res.status(500).json({ error: "***ERROR: Failed to load level**" });
+    res.status(500).json({ error: "***ERROR: Failed to load level***" });
   }
 });
 
 /*
 *GET /api/levels/:levelId/solution
-* thi is optional - separate endpoint only for solution
+* this returns solution placements
 */
 router.get("/levels/:levelId/solution", async (req, res) => {
   try {
@@ -59,15 +64,18 @@ router.get("/levels/:levelId/solution", async (req, res) => {
     const data = await readInfoJson();
     const levels = data.levels || [];
 
-    const level = levels[levelId - 1];
-    if (!level) return res.status(404).json({ error: "***ERROR: Level not found***" });
+    const level = levels.find((l) => Number(l.levelNumber) === levelId) || levels[levelId - 1];
+
+    if (!level) {
+      return res.status(404).json({ error: "***ERROR: Level not found***" });
+    }
 
     res.json({
-      id: levelId,
-      solutions: normalizeTiles(level.solutions)
+      id: level.levelNumber ?? levelId,
+      solutions: normalizeSolutions(level.solutions)
     });
   } catch (err) {
-    res.status(500).json({ error: "***ERROR:Failed to load solution" });
+    res.status(500).json({ error: "***ERROR: Failed to load solution***" });
   }
 });
 
