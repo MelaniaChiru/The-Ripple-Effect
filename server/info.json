@@ -1,5 +1,7 @@
 {"levels" : [
         {
+            "levelNumber": 1,
+            "gridSize": [2,2],
             "tiles": [
                 {"name" : "house-1", "img": "house.png", "postion": [1,1], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
                 {"name" : "house-2", "img": "house.png", "postion": [2,2], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
