@@ -8,7 +8,7 @@
 
 .ripple {
   position: absolute;
-  border: 5px solid #F6FCFE;
+  border: 10px solid #F6FCFE;
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -36,7 +36,6 @@
 
 .homepage{
 	position: relative;
-	background-image: linear-gradient(#D3EEF8, #BEE1F1);
 	width: 100vw;
 	height: 100vh;
 
@@ -59,20 +58,20 @@
 .homepage main h1{
 	font-size: 4rem;
 	text-align: center;
-	color: #46819E;
+	color: #39495C;
 }
 
 .homepage footer{
 	text-align: center;
 	padding: 1rem;
-	color: #46819E;
+	color: #39495C;
 }
 
 .homepage__button{
-	border: 1px solid #46819E;
+	border: 3px solid #39495C;
 	padding: 1rem 2rem;
 	border-radius: 50px;
 	font-size: 1.5rem;
-	color: #46819E;
+	color: #39495C;
 	background-image: linear-gradient(#F4FDFD, #DDF3FC);
 }
