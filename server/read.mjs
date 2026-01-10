@@ -25,6 +25,13 @@ class Level {
     }
 }
 
+class Solution {
+    constructor(id, position) {
+        this.id = id;
+        this.position = position;
+    }
+}
+
 export async function readJSON() {
     try {
         const data = await fs.readFile(path.join(process.cwd(), filename), "utf-8");
