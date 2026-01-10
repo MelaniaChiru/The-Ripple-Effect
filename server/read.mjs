@@ -17,7 +17,9 @@ class Tile {
     }
 }
 class Level {
-    constructor(tiles, solution) {
+    constructor(name, size, tiles, solution) {
+        this.name = name;
+        this.size = size;
         this.tiles = tiles;
         this.solution = solution;
     }
