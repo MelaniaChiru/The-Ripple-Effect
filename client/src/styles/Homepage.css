@@ -1,0 +1,78 @@
+/* --- Ripple Animation --- */
+.ripple-background {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.ripple {
+  position: absolute;
+  border: 5px solid #F6FCFE;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  opacity: 0;
+  animation: ripple-wave 8s infinite linear;
+  transform: translate(-50%, -50%);
+}
+
+/* Staggering the ripples */
+.ripple:nth-child(2) { animation-delay: 2s; }
+.ripple:nth-child(3) { animation-delay: 4s; }
+
+@keyframes ripple-wave {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 0.8;
+  }
+  100% {
+    width: 1200px;
+    height: 1200px;
+    opacity: 0;
+  }
+}
+
+.homepage{
+	position: relative;
+	background-image: linear-gradient(#D3EEF8, #BEE1F1);
+	width: 100vw;
+	height: 100vh;
+
+	overflow: hidden;
+	
+	display: flex;
+	flex-direction: column;
+
+}
+
+.homepage main{
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	z-index: 2;
+}
+
+.homepage main h1{
+	font-size: 4rem;
+	text-align: center;
+	color: #46819E;
+}
+
+.homepage footer{
+	text-align: center;
+	padding: 1rem;
+	color: #46819E;
+}
+
+.homepage__button{
+	border: 1px solid #46819E;
+	padding: 1rem 2rem;
+	border-radius: 50px;
+	font-size: 1.5rem;
+	color: #46819E;
+	background-image: linear-gradient(#F4FDFD, #DDF3FC);
+}

@@ -6,19 +6,29 @@ const filename = "info.json";
 let levels = [];
 
 class Tile {
-    constructor(id, type, imgPath, posX, posY, effect) {
+    constructor(id, type, imgPath, posX, posY, tileColour, effect) {
         this.id = id;
         this.type = type;
         this.imgPath = imgPath;
         this.posX = posX;
         this.posY = posY;
+        this.tileColour = tileColour;
         this.effect = effect;
     }
 }
 class Level {
-    constructor(tiles, solution) {
+    constructor(name, size, tiles, solution) {
+        this.name = name;
+        this.size = size;
         this.tiles = tiles;
         this.solution = solution;
+    }
+}
+
+class Solution {
+    constructor(id, position) {
+        this.id = id;
+        this.position = position;
     }
 }
 
@@ -42,13 +52,15 @@ function parseLevels(jsonData) {
                 tile.img,
                 tile.postion[0],
                 tile.postion[1],
+                tile.tileColour,
                 tile.effect
             );
         });
-        console.log("Parsed tiles:", tiles);
-        return new Level(tiles, level.solution);
+        const solution = level.solutions.map((sol) => {
+            return new Solution(sol.id, sol.position);
+        });
+        return new Level(level.levelNumber, level.gridSize, tiles, solution);
     });
 }
 
 readJSON();
-console.log("Levels loaded:", levels);

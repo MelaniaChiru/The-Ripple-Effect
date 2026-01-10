@@ -1,9 +1,14 @@
+import { useState } from 'react'
 import '../styles/App.css'
+import Homepage from './Homepage'
 
 function App() {
+  const [currentPage, setCurrentPage] = useState("homepage");
 
   return (
-    <h1>Ripple Effect</h1>
+    <>
+      {currentPage == "homepage" && <Homepage setCurrentPage={setCurrentPage}/>}
+    </>
   )
 }
 
