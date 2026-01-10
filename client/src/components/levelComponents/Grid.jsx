@@ -1,4 +1,6 @@
 import Tile from './Tile.jsx';
+import House from '../../assets/images/house.png';
+import './Grid.css';
 
 function Grid({tiles}) {
     return (
