@@ -45,6 +45,16 @@ function LevelSelection({ setCurrentPage }) {
         }
     }, [progress]);
 
+
+	function onLevelSelectHandler(e) {
+		const container = e.currentTarget;
+		const levelId = container.getAttribute('data-level');
+		
+		if (levelId) {
+			setCurrentPage(`level-${levelId}`);
+		}
+	}
+
     return (
         <div className="level-selection-screen">
             <button className="back-arrow" onClick={() => setCurrentPage("homepage")}>
@@ -60,6 +70,7 @@ function LevelSelection({ setCurrentPage }) {
                             // String(id) ensures it matches "1", "2", etc.
                             isUnlocked={progress[String(id)] === true} 
                             index={i}
+							onClick={(e)=>(onLevelSelectHandler(e))}
                         />
                     ))}
                 </div>
