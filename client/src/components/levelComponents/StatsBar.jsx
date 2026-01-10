@@ -1,0 +1,51 @@
+import React from 'react';
+import '../../styles/StatsBar.css'
+import Happy from '../../assets/icons/happy.png';
+import Environment from '../../assets/icons/environment.png';
+// import Environment from '../../assets/icons/eco.png';
+
+const StatsBar = ({ happiness, environment }) => {
+  return (
+    <div className="stats-container">
+      {/* Happiness Stat */}
+      <div className="stat-item">
+        <div className="stat-header">
+			<span className="stat-label stat-label--happy"> 
+				<img src={Happy} alt="Smiling Emoji " />
+				Happiness
+			</span>
+			<span className="stat-value">{Math.round(happiness)}</span>
+        </div>
+        <div className="progress-track">
+          {/* The Target Win Zone Marker */}
+          <div className="win-zone-marker"></div>
+          {/* The Actual Progress Fill */}
+          <div 
+            className={`progress-fill happiness-fill ${happiness > 80 ? 'over-optimized' : ''}`} 
+            style={{ width: `${happiness}%` }}
+          ></div>
+        </div>
+      </div>
+
+      {/* Environment Stat */}
+      <div className="stat-item">
+        <div className="stat-header">
+          <span className="stat-label"> 
+				<img src={Environment} alt="Green Earth" />
+				Environment
+			</span>
+          <span className="stat-value">{Math.round(environment)}</span>
+        </div>
+        <div className="progress-track">
+          <div className="win-zone-marker"></div>
+          <div 
+            className={`progress-fill environment-fill ${environment > 80 ? 'over-optimized' : ''}`} 
+            style={{ width: `${environment}%` }}
+          ></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default StatsBar;

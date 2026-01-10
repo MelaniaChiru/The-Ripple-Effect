@@ -3,6 +3,7 @@ import Tile from './Tile.jsx';
 import Palette from './Palette.jsx';
 import House from '../../assets/images/house.png';
 import '../../styles/grid.css';
+import StatsBar from './StatsBar.jsx';
 
 function Grid() {
     const size = 6;
@@ -62,12 +63,16 @@ function Grid() {
 
     return ( 
         <section class='grid-section'>
-            <div id='tiles' onDragOver={handleDragOver} onDrop={handleDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onClick={handleClick} style={{display: 'grid', gridTemplateColumns: `repeat(${size}, 65px)`, gridTemplateRows: `repeat(${size}, 65px)`, gap: '6px'}}>
+            <div className="tiles" id='tiles' onDragOver={handleDragOver} onDrop={handleDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onClick={handleClick} style={{display: 'grid', gridTemplateColumns: `repeat(${size}, 65px)`, gridTemplateRows: `repeat(${size}, 65px)`, gap: '6px'}}>
                 {tiles.map((tile) => (
                     <Tile key={tile.id} id={tile.id} type={tile.type} imgPath={tile.imgPath} />
                 ))}
             </div>
+
             <Palette />
+            <StatsBar happiness="40" environment="40"/>
+
+
         </section>
     );
 }
