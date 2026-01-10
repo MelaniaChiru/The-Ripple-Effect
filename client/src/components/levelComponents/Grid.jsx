@@ -61,7 +61,7 @@ function Grid() {
     }; 
 
     return ( 
-        <section id='grid-section'>
+        <section class='grid-section'>
             <div id='tiles' onDragOver={handleDragOver} onDrop={handleDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onClick={handleClick} style={{display: 'grid', gridTemplateColumns: `repeat(${size}, 65px)`, gridTemplateRows: `repeat(${size}, 65px)`, gap: '6px'}}>
                 {tiles.map((tile) => (
                     <Tile key={tile.id} id={tile.id} type={tile.type} imgPath={tile.imgPath} />
