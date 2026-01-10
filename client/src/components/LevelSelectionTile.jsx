@@ -1,30 +1,21 @@
 import LockIcon from '../assets/icons/lock-icon.svg';
 
-function LevelSelectionTile({ level, index }) {
-  // Determine if it's shifted left or right for the winding effect
-  const sideClass = index % 2 === 0 ? "left-side" : "right-side";
-  const isUnlocked = true;
-  
-  return (
-    <div className={`level-node-wrapper ${sideClass}`}>
-      <div 
-        className={`level-circle ${level.status} ${isUnlocked ? 'active-ripple' : 'locked'}`}
-      >
+function LevelSelectionTile({ levelId, isUnlocked, index }) {
+    const sideClass = index % 2 === 0 ? "left-side" : "right-side";
 
-		{isUnlocked && <div className="level-text">
-            <span className="level-label">Level {index + 1}</span>
-          </div>}
-
-        {!isUnlocked && 
-		<img 
-            src={LockIcon} 
-            alt="Icons of a locked lock" 
-            className="lock-icon" 
-          />
-		  }
-      </div>
-    </div>
-  );
+    return (
+        <div className={`level-node-wrapper ${sideClass}`}>
+            <div className={`level-circle ${isUnlocked ? 'unlocked active-ripple' : 'locked'}`}>
+                {isUnlocked ? (
+                    <div className="level-text">
+                        <span className="level-label">Level {levelId}</span>
+                    </div>
+                ) : (
+                    <img src={LockIcon} alt="Locked" className="lock-icon-img" />
+                )}
+            </div>
+        </div>
+    );
 }
 
 export default LevelSelectionTile;
