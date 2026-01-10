@@ -24,6 +24,7 @@ router.get("/tiles", async (req, res) => {
         unique.set(t.type, {
           type: t.type,
           img: t.img,
+          tileColour: t.tileColour,
           effect: t.effect
         });
       }
@@ -56,6 +57,7 @@ router.get("/tiles/:type", async (req, res) => {
     res.json({
       type: found.type,
       img: found.img,
+      tileColour: found.tileColour,
       effect: found.effect
     });
   } catch (err) {
