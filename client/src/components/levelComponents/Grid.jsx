@@ -1,60 +1,73 @@
+import React, { useState } from 'react';
 import Tile from './Tile.jsx';
+import Palette from './Palette.jsx';
 import House from '../../assets/images/house.png';
 import '../../styles/grid.css';
 
 function Grid() {
-    const size = 6
-    const tiles = document.getElementById('tiles');
-    tiles.addEventListener('click', (e) => {
+    const size = 6;
+
+    const initialTiles = Array.from({ length: size * size }).map((_, i) => ({
+        id: `tile-${i + 1}`,
+        type: null,
+        imgPath: null,
+    }));
+
+    const [tiles, setTiles] = useState(initialTiles);
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    const handleDragEnter = (e) => {
+        const tile = e.target.closest('.tile');
+        if (tile) tile.classList.add('drag-over');
+    };
+
+    const handleDragLeave = (e) => {
+        const tile = e.target.closest('.tile');
+        if (tile) tile.classList.remove('drag-over');
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const data = e.dataTransfer.getData('application/json') || e.dataTransfer.getData('text');
+        let payload;
+        try {
+            payload = JSON.parse(data);
+        } catch (err) {
+            payload = { type: data };
+        }
+        const tileEl = e.target.closest('.tile');
+        if (!tileEl) return;
+        const targetId = tileEl.id;
+
+        setTiles((prev) => prev.map((t) => {
+            // Place payload into target
+            if (t.id === targetId) return { ...t, type: payload.type, imgPath: payload.imgPath };
+            // If this came from another tile (originId), clear the origin tile
+            if (payload.originId && t.id === payload.originId && payload.originId !== targetId) return { ...t, type: null, imgPath: null };
+            return t;
+        }));
+
+        tileEl.classList.remove('drag-over');
+    };
+
+    const handleClick = (e) => {
         if (e.target && e.target.matches('img')) {
             const tile = e.target.parentNode;
             console.log(`Tile ID: ${tile.id}, Type: ${tile.getAttribute('data-type')}`);
         }
-    });
+    }; 
 
-    return (
+    return ( 
         <section id='grid-section'>
-            <div id='tiles' style={{display: 'grid', gridTemplateColumns: `repeat(${size}, 65px)`, gridTemplateRows: `repeat(${size}, 65px)`}}>
-                {/* {tiles.map((tile) => (
-                    <Tile key={tile.name} id={tile.id} type={tile.type} imgPath={tile.imgPath} />
-                ))} */}
-                <Tile id="tile-1" type="house" imgPath={House} />
-                <Tile id="tile-2" type="school" imgPath={House} />
-                <Tile id="tile-3" type="park" imgPath={House} />
-                <Tile id="tile-4" type="house" imgPath={House} />
-                <Tile id="tile-5" type="park" imgPath={House} />
-                <Tile id="tile-6" type="house" imgPath={House} />
-                <Tile id="tile-7" type="school" imgPath={House} />
-                <Tile id="tile-8" type="house" imgPath={House} />
-                <Tile id="tile-9" type="park" imgPath={House} />
-                <Tile id="tile-10" type="house" imgPath={House} />
-                <Tile id="tile-11" type="school" imgPath={House} />
-                <Tile id="tile-12" type="park" imgPath={House} />
-                <Tile id="tile-13" type="house" imgPath={House} />
-                <Tile id="tile-14" type="park" imgPath={House} />
-                <Tile id="tile-15" type="house" imgPath={House} />
-                <Tile id="tile-16" type="school" imgPath={House} />
-                <Tile id="tile-17" type="park" imgPath={House} />
-                <Tile id="tile-18" type="house" imgPath={House} />
-                <Tile id="tile-19" type="school" imgPath={House} />
-                <Tile id="tile-20" type="park" imgPath={House} />
-                <Tile id="tile-21" type="house" imgPath={House} />
-                <Tile id="tile-22" type="school" imgPath={House} />
-                <Tile id="tile-23" type="park" imgPath={House} />
-                <Tile id="tile-24" type="house" imgPath={House} />
-                <Tile id="tile-25" type="park" imgPath={House} />
-                <Tile id="tile-26" type="house" imgPath={House} />
-                <Tile id="tile-27" type="school" imgPath={House} />
-                <Tile id="tile-28" type="house" imgPath={House} />
-                <Tile id="tile-29" type="park" imgPath={House} />
-                <Tile id="tile-30" type="house" imgPath={House} />
-                <Tile id="tile-31" type="school" imgPath={House} />
-                <Tile id="tile-32" type="park" imgPath={House} />
-                <Tile id="tile-33" type="house" imgPath={House} />
-                <Tile id="tile-34" type="park" imgPath={House} />
-                <Tile id="tile-35" type="house" imgPath={House} />
-                <Tile id="tile-36" type="school" imgPath={House} />
+            <div id='tiles' onDragOver={handleDragOver} onDrop={handleDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onClick={handleClick} style={{display: 'grid', gridTemplateColumns: `repeat(${size}, 65px)`, gridTemplateRows: `repeat(${size}, 65px)`, gap: '6px'}}>
+                {tiles.map((tile) => (
+                    <Tile key={tile.id} id={tile.id} type={tile.type} imgPath={tile.imgPath} />
+                ))}
             </div>
+            <Palette />
         </section>
     );
 }

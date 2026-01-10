@@ -1,0 +1,33 @@
+import React from 'react';
+import House from '../../assets/images/house.png';
+import '../../styles/grid.css';
+
+const items = [
+    { type: 'house', imgPath: House },
+    { type: 'school', imgPath: House },
+    { type: 'park', imgPath: House },
+];
+
+function Palette() {
+    const handleDragStart = (e, item) => {
+        const payload = { ...item, originId: null };
+        e.dataTransfer.setData('application/json', JSON.stringify(payload));
+        e.dataTransfer.effectAllowed = 'copy';
+    };
+
+    return (
+        <aside id="palette">
+            <h3>Palette</h3>
+            <div className="palette-items">
+                {items.map((it) => (
+                    <div key={it.type} className="palette-item" draggable onDragStart={(e) => handleDragStart(e, it)}>
+                        <img src={it.imgPath} alt={it.type} width={40} />
+                        <div className="palette-label">{it.type}</div>
+                    </div>
+                ))}
+            </div>
+        </aside>
+    );
+}
+
+export default Palette;
