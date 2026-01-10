@@ -50,7 +50,7 @@
 }
 
 .tile.fixed {
-    background: #f8f9fa;
+    background: #d9cda0;
     box-shadow: inset 0 0 0 2px rgba(0,0,0,0.03);
 }
 
@@ -71,6 +71,21 @@
     height: 40px;
     background: #ada172;
     border-radius: 4px;
+}
+
+/* radius highlight for affected tiles */
+.tile.radius-highlight {
+    outline: 4px solid rgba(255, 235, 59, 0.7);
+    background: linear-gradient(180deg, rgba(255,235,59,0.12), rgba(255,235,59,0.04));
+    position: relative;
+}
+
+.radius-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    box-shadow: 0 0 0 2px rgba(255,235,59,0.18) inset;
+    pointer-events: none;
 }
 
 .tile img {

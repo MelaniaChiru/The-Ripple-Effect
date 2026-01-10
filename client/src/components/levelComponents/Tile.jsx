@@ -1,4 +1,4 @@
-function Tile ({id, type, imgPath, fixed = false}) {
+function Tile ({id, type, imgPath, fixed = false, highlighted = false}) {
     const handleDragStart = (e) => {
         // Don't allow dragging fixed tiles or empty tiles
         if (!imgPath || fixed) {
@@ -10,13 +10,16 @@ function Tile ({id, type, imgPath, fixed = false}) {
         e.dataTransfer.effectAllowed = 'move';
     };
 
+    const className = `tile ${fixed ? 'fixed' : ''} ${highlighted ? 'radius-highlight' : ''}`;
+
     return (
-        <div className={`tile ${fixed ? 'fixed' : ''}`} id={id} data-type={type ?? ''}>
+        <div className={className} id={id} data-type={type ?? ''}>
             {imgPath ? (
                 <img src={imgPath} alt={type} width={"50px"} draggable={!fixed} onDragStart={handleDragStart} />
             ) : (
                 <div className="empty-placeholder" />
             )}
+            {highlighted && <div className="radius-overlay" aria-hidden />}
         </div>
     );
 }
