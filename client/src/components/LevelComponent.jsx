@@ -1,4 +1,13 @@
+import { use, useEffect } from "react";
+import Grid from "./levelComponents/Grid";
+
 function LevelComponent({ level, setCurrentPage }) {
+	let levelInfo;
+
+	useEffect(() => {
+		levelInfo = fetch("/api/level/" + level);
+	}, []);
+
 	return (
 		<div>
 			<button className="back-arrow" onClick={() => setCurrentPage("level-selection")}>
@@ -6,6 +15,8 @@ function LevelComponent({ level, setCurrentPage }) {
             </button>
 
 			Level {level}
+			<Grid />
+
 		</div>
 	);
 }

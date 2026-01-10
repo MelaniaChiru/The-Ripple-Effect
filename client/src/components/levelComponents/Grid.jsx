@@ -36,7 +36,7 @@ function Grid() {
         try {
             payload = JSON.parse(data);
         } catch (err) {
-            payload = { type: data };
+            payload = { type: data, error: err };
         }
         const tileEl = e.target.closest('.tile');
         if (!tileEl) return;
