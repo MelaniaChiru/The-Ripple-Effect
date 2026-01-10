@@ -64,4 +64,3 @@ function parseLevels(jsonData) {
 }
 
 readJSON();
-console.log("Levels loaded:", levels);
