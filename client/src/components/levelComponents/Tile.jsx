@@ -1,6 +1,6 @@
-function Tile ({id, type, imgPath, posX, posY, effect}) {
+function Tile ({id, type, imgPath}) {
     return (
-        <div className="tile" id={id} data-type={type} data-effect={effect} style={{left: posX, top: posY}}>
+        <div className="tile" id={id} data-type={type}>
             <img src={imgPath} alt={type} />
         </div>
     );
