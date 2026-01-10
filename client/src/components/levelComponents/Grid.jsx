@@ -2,32 +2,149 @@ import React, { useState } from 'react';
 import Tile from './Tile.jsx';
 import Palette from './Palette.jsx';
 import House from '../../assets/images/house.png';
+import Park from '../../assets/images/park.png';
+import School from '../../assets/images/school.png';
 import '../../styles/grid.css';
 import StatsBar from './StatsBar.jsx';
 
-function Grid() {
-    const size = 6;
+function Grid({levelInfo}) {
+    const GRID_SIZE = 6; // grid is always 6x6 per requirements
+    const rows = GRID_SIZE;
+    const cols = GRID_SIZE;
 
-    const initialTiles = Array.from({ length: size * size }).map((_, i) => ({
+    // Build initial tiles with pre-placed (fixed) tiles from levelInfo
+    const initialTiles = Array.from({ length: rows * cols }).map((_, i) => ({
         id: `tile-${i + 1}`,
         type: null,
         imgPath: null,
+        fixed: false,
     }));
 
-    const [tiles, setTiles] = useState(initialTiles);
+    // Place pre-placed tiles according to levelInfo.tiles positions
+    const levelTiles = levelInfo?.tiles || [];
+
+    // Map type -> number of available (unplaced) tiles
+    const computeCounts = () => {
+        const counts = {};
+        for (const t of levelTiles) {
+            const type = t.type;
+            const pos = t.position || { r: -1, c: -1 };
+            const r = pos.r ?? -1;
+            const c = pos.c ?? -1;
+            // treat as available if not placed within the 6x6 grid
+            if (r < 1 || c < 1 || r > GRID_SIZE || c > GRID_SIZE) {
+                counts[type] = (counts[type] || 0) + 1; // available to be placed
+            }
+        }
+        return counts;
+    }; 
+
+    // helper to map a type to an image asset (fallback to House)
+    const getImageForType = (type) => {
+        switch (type) {
+            case 'house': return House;
+            case 'park': return Park;
+            case 'school': return School;
+            default: return House;
+        }
+    };
+
+    const seededTiles = initialTiles.map((cell, idx) => {
+        const r = Math.floor(idx / cols) + 1;
+        const c = (idx % cols) + 1;
+        // find a level tile that has this position
+        const match = levelTiles.find((lt) => (lt.position?.r === r && lt.position?.c === c));
+        if (match) {
+            return {
+                ...cell,
+                type: match.type,
+                imgPath: getImageForType(match.type),
+                fixed: true,
+            };
+        }
+        return cell;
+    });
+
+    const [tiles, setTiles] = useState(seededTiles);
+    const [counts, setCounts] = useState(computeCounts());
+
+    const [highlightedIds, setHighlightedIds] = useState([]);
+    const [highlightCenter, setHighlightCenter] = useState(null);
+    const RADIUS_MAP = { park: 1, school: 2 };
+
+    const getPosFromId = (id) => {
+        const idx = Number(id.split('-')[1]) - 1;
+        return { r: Math.floor(idx / cols) + 1, c: (idx % cols) + 1 };
+    };
+
+    const getAffectedHouseIds = (centerId, radius) => {
+        if (!centerId) return [];
+        const center = getPosFromId(centerId);
+        const ids = [];
+        tiles.forEach((t) => {
+            if (t.type !== 'house') return;
+            const pos = getPosFromId(t.id);
+            const dist = Math.abs(pos.r - center.r) + Math.abs(pos.c - center.c); // Manhattan distance
+            if (dist <= radius) ids.push(t.id);
+        });
+        return ids;
+    };
+
+    const clearHighlights = () => {
+        setHighlightedIds([]);
+        setHighlightCenter(null);
+    };
 
     const handleDragOver = (e) => {
         e.preventDefault();
+        // also update hover preview while moving
+        const tileEl = e.target.closest('.tile');
+        if (!tileEl) return;
+        try {
+            const data = e.dataTransfer.getData('application/json');
+            if (!data) return;
+            const payload = JSON.parse(data);
+            const rType = payload.type;
+            if (rType === 'park' || rType === 'school') {
+                const radius = RADIUS_MAP[rType];
+                const ids = getAffectedHouseIds(tileEl.id, radius);
+                setHighlightedIds(ids);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const handleDragEnter = (e) => {
         const tile = e.target.closest('.tile');
         if (tile) tile.classList.add('drag-over');
+        // compute and show radius preview if dragging a park/school
+        try {
+            const data = e.dataTransfer.getData('application/json');
+            if (!data) return;
+            const payload = JSON.parse(data);
+            const rType = payload.type;
+            if (rType === 'park' || rType === 'school') {
+                const radius = RADIUS_MAP[rType];
+                const ids = getAffectedHouseIds(tile?.id, radius);
+                setHighlightedIds(ids);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const handleDragLeave = (e) => {
         const tile = e.target.closest('.tile');
         if (tile) tile.classList.remove('drag-over');
+        // clear preview
+        clearHighlights();
+    };
+
+    const flashInvalid = (tileEl) => {
+        if (!tileEl) return;
+        tileEl.classList.add('invalid-drop');
+        setTimeout(() => tileEl.classList.remove('invalid-drop'), 300);
     };
 
     const handleDrop = (e) => {
@@ -43,36 +160,97 @@ function Grid() {
         if (!tileEl) return;
         const targetId = tileEl.id;
 
-        setTiles((prev) => prev.map((t) => {
-            // Place payload into target
-            if (t.id === targetId) return { ...t, type: payload.type, imgPath: payload.imgPath };
-            // If this came from another tile (originId), clear the origin tile
-            if (payload.originId && t.id === payload.originId && payload.originId !== targetId) return { ...t, type: null, imgPath: null };
-            return t;
-        }));
+        // prevent dropping onto fixed tile
+        const targetTile = tiles.find((t) => t.id === targetId);
+        if (targetTile?.fixed) {
+            flashInvalid(tileEl);
+            tileEl.classList.remove('drag-over');
+            clearHighlights();
+            return;
+        }
+
+        // if coming from palette (originId === null) -> copy, must have counts
+        if (payload.originId === null || payload.originId === undefined) {
+            const available = counts[payload.type] || 0;
+            if (available <= 0) {
+                flashInvalid(tileEl);
+                tileEl.classList.remove('drag-over');
+                clearHighlights();
+                return;
+            }
+
+            // if target has an existing non-fixed tile, return it to counts
+            const previousType = targetTile?.type;
+            setTiles((prev) => prev.map((t) => (t.id === targetId ? { ...t, type: payload.type, imgPath: payload.imgPath ?? getImageForType(payload.type) } : t)));
+
+            setCounts((prev) => {
+                const next = { ...prev, [payload.type]: (prev[payload.type] || 1) - 1 };
+                if (previousType) next[previousType] = (next[previousType] || 0) + 1;
+                return next;
+            });
+
+        } else {
+            // moving from another tile within the grid
+            const originId = payload.originId;
+            if (originId === targetId) {
+                tileEl.classList.remove('drag-over');
+                clearHighlights();
+                return;
+            }
+
+            setTiles((prev) => prev.map((t) => {
+                const originTile = prev.find((p) => p.id === originId);
+                const targetTileLocal = prev.find((p) => p.id === targetId);
+
+                // swap types between origin and target
+                if (t.id === targetId) return { ...t, type: originTile?.type ?? null, imgPath: originTile?.imgPath ?? null };
+                if (t.id === originId) return { ...t, type: targetTileLocal?.type ?? null, imgPath: targetTileLocal?.imgPath ?? null };
+                return t;
+            }));
+        }
 
         tileEl.classList.remove('drag-over');
+        clearHighlights();
     };
 
     const handleClick = (e) => {
         if (e.target && e.target.matches('img')) {
-            const tile = e.target.parentNode;
+            const tileEl = e.target.parentNode;
+            const type = tileEl.getAttribute('data-type');
+
+            // if clicking on park/school on the grid, show effected houses
+            if (type === 'park' || type === 'school') {
+                const radius = RADIUS_MAP[type];
+                // toggle if same center
+                if (highlightCenter === tileEl.id) {
+                    clearHighlights();
+                    return;
+                }
+                const ids = getAffectedHouseIds(tileEl.id, radius);
+                setHighlightedIds(ids);
+                setHighlightCenter(tileEl.id);
+                return;
+            }
+
+            // otherwise log click and clear highlights
+            const tile = tileEl;
             console.log(`Tile ID: ${tile.id}, Type: ${tile.getAttribute('data-type')}`);
+            clearHighlights();
+        } else {
+            // click outside tiles clears highlight
+            clearHighlights();
         }
-    }; 
+    };
 
     return ( 
         <section class='grid-section'>
             <div className="tiles" id='tiles' onDragOver={handleDragOver} onDrop={handleDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onClick={handleClick} >
+            <Palette counts={counts} />
                 {tiles.map((tile) => (
-                    <Tile key={tile.id} id={tile.id} type={tile.type} imgPath={tile.imgPath} />
+                    <Tile key={tile.id} id={tile.id} type={tile.type} imgPath={tile.imgPath} fixed={tile.fixed} highlighted={highlightedIds.includes(tile.id)} />
                 ))}
             </div>
-
-            <Palette />
             <StatsBar happiness="40" environment="40"/>
-
-
         </section>
     );
 }
