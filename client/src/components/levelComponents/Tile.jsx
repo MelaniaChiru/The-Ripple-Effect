@@ -1,7 +1,7 @@
-function Tile ({id, type, imgPath}) {
+function Tile ({id, type, imgPath, fixed = false}) {
     const handleDragStart = (e) => {
-        // Only start drag if this tile has an image (i.e., not empty)
-        if (!imgPath) {
+        // Don't allow dragging fixed tiles or empty tiles
+        if (!imgPath || fixed) {
             e.preventDefault();
             return;
         }
@@ -11,9 +11,9 @@ function Tile ({id, type, imgPath}) {
     };
 
     return (
-        <div className="tile" id={id} data-type={type ?? ''}>
+        <div className={`tile ${fixed ? 'fixed' : ''}`} id={id} data-type={type ?? ''}>
             {imgPath ? (
-                <img src={imgPath} alt={type} width={"50px"} draggable={true} onDragStart={handleDragStart} />
+                <img src={imgPath} alt={type} width={"50px"} draggable={!fixed} onDragStart={handleDragStart} />
             ) : (
                 <div className="empty-placeholder" />
             )}
