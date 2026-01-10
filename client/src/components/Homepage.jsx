@@ -1,10 +1,32 @@
 import '../styles/Homepage.css'
 
-function Homepage() {
-
+const Homepage = ({setCurrentPage}) => {
   return (
-    <h1>Homepage</h1>
-  )
-}
+    <div className="homepage">
+      {/* Animated Ripple Background */}
+      <div className="ripple-background">
+        <div className="ripple"></div>
+        <div className="ripple"></div>
+        <div className="ripple"></div>
+      </div>
 
-export default Homepage
+      {/* Main Content */}
+      <main className="home-content">
+        <h1>
+          THE <br /> RIPPLE <br /> EFFECT
+        </h1>
+
+        <button className="homepage__button" onClick={()=>{setCurrentPage("level-selection")}}>
+          Start Playing
+        </button>
+      </main>
+
+	  {/* Footer */}
+	  <footer>
+		&copy; 2026 | Melania Chiru, Sungeun Kim, Ash Rebelo
+	  </footer>
+    </div>
+  );
+};
+
+export default Homepage;
