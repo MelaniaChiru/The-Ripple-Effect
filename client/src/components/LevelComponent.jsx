@@ -22,7 +22,7 @@ function LevelComponent({ level, setCurrentPage }) {
 			<button className="back-arrow" onClick={() => setCurrentPage("level-selection")}>
                 <span>&#11013;</span> <span>Back to levels</span>
             </button>
-			Level {level}
+			<h1>Level {level}</h1>
 			{levelInfo && <Grid levelInfo={levelInfo} />}
 
 		</div>

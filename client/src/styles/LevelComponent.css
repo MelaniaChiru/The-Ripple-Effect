@@ -7,6 +7,12 @@
 	padding: 20px;
 }
 
+.level-component h1{
+	text-align: center;
+	margin: 0.5rem;
+	color: #38485C;
+}
+
 .level-component .back-arrow{
 	position: relative;
 	top: 0;
