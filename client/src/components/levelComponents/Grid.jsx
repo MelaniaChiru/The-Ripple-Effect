@@ -1,6 +1,15 @@
-function Grid({numberOfRows, numberOfColumns, gridData}) {
+import Tile from './Tile.jsx';
+
+function Grid({tiles}) {
     return (
-        <div>Grid Component</div>
+        <>
+            <h1>Grid</h1>
+            <div className="grid">
+                {tiles.map((tile) => (
+                    <Tile key={tile.name} id={tile.id} type={tile.type} imgPath={tile.imgPath} />
+                ))}
+            </div>
+        </>
     );
 }
 
