@@ -245,11 +245,12 @@ function Grid({levelInfo}) {
     return ( 
         <section class='grid-section'>
             <div className="tiles" id='tiles' onDragOver={handleDragOver} onDrop={handleDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onClick={handleClick} >
-            <Palette counts={counts} />
+            
                 {tiles.map((tile) => (
                     <Tile key={tile.id} id={tile.id} type={tile.type} imgPath={tile.imgPath} fixed={tile.fixed} highlighted={highlightedIds.includes(tile.id)} />
                 ))}
             </div>
+            <Palette counts={counts} />
             <StatsBar happiness="40" environment="40"/>
         </section>
     );
