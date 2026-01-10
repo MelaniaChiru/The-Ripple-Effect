@@ -111,3 +111,15 @@
     font-weight: bold;
     margin-left: 6px;
 }
+
+/* Level complete banner */
+.level-complete {
+    margin-top: 12px;
+    padding: 10px;
+    background: linear-gradient(90deg, #d4f5d4, #ffffff);
+    border: 1px solid #8bc34a;
+    border-radius: 6px;
+    color: #2e7d32;
+    font-weight: 700;
+    text-align: center;
+}

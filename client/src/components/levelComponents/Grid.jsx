@@ -68,9 +68,41 @@ function Grid({levelInfo}) {
     const [tiles, setTiles] = useState(seededTiles);
     const [counts, setCounts] = useState(computeCounts());
 
+    // base stats for the level (fallback to 40 if not provided)
+    const BASE_STATS = levelInfo?.baseStats ?? { happiness: 40, environment: 40 };
+
     const [highlightedIds, setHighlightedIds] = useState([]);
     const [highlightCenter, setHighlightCenter] = useState(null);
     const RADIUS_MAP = { park: 1, school: 2 };
+
+    // derive stats from placed tiles and level definitions
+    const stats = React.useMemo(() => {
+        let happiness = BASE_STATS.happiness ?? 40;
+        let environment = BASE_STATS.environment ?? 40;
+
+        for (const t of tiles) {
+            if (!t.type) continue;
+            // find the tile definition from level data to get effect values
+            const def = levelTiles.find((lt) => lt.type === t.type);
+            if (def && def.effect) {
+                environment += def.effect.environment ?? 0;
+                happiness += def.effect.happiness ?? 0;
+            }
+        }
+
+        // clamp to [0,100]
+        environment = Math.max(0, Math.min(100, environment));
+        happiness = Math.max(0, Math.min(100, happiness));
+        return { environment, happiness };
+    }, [tiles, levelTiles, BASE_STATS.happiness, BASE_STATS.environment]);
+
+    const [levelComplete, setLevelComplete] = useState(false);
+
+    React.useEffect(() => {
+        // require that there are no remaining tiles in the palette (all placed)
+        const allPlaced = Object.values(counts).every((c) => c === 0);
+        setLevelComplete(allPlaced && stats.environment >= 70 && stats.happiness >= 70);
+    }, [stats.environment, stats.happiness, counts]);
 
     const getPosFromId = (id) => {
         const idx = Number(id.split('-')[1]) - 1;
@@ -245,13 +277,17 @@ function Grid({levelInfo}) {
     return ( 
         <section class='grid-section'>
             <div className="tiles" id='tiles' onDragOver={handleDragOver} onDrop={handleDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onClick={handleClick} >
-            
                 {tiles.map((tile) => (
                     <Tile key={tile.id} id={tile.id} type={tile.type} imgPath={tile.imgPath} fixed={tile.fixed} highlighted={highlightedIds.includes(tile.id)} />
                 ))}
             </div>
             <Palette counts={counts} />
-            <StatsBar happiness="40" environment="40"/>
+            <div className="stats-container">
+                <StatsBar happiness={stats.happiness} environment={stats.environment} />
+                {levelComplete && (
+                    <div className="level-complete">✅ Level Complete! Both Environment and Happiness ≥ 70</div>
+                )}
+            </div>
         </section>
     );
 }
