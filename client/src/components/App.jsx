@@ -8,7 +8,7 @@ function App() {
   return (
     <>
       {currentPage == "homepage" && <Homepage setCurrentPage={setCurrentPage}/>}
-      <Grid level={1} size={6} />
+      <Grid />
     </>
   )
 }

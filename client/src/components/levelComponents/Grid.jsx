@@ -2,7 +2,8 @@ import Tile from './Tile.jsx';
 import House from '../../assets/images/house.png';
 import '../../styles/grid.css';
 
-function Grid({level, size}) {
+function Grid() {
+    const size = 6
     const tiles = document.getElementById('tiles');
     tiles.addEventListener('click', (e) => {
         if (e.target && e.target.matches('img')) {
@@ -13,7 +14,6 @@ function Grid({level, size}) {
 
     return (
         <section id='grid-section'>
-            <h1>Level {level}</h1>
             <div id='tiles' style={{display: 'grid', gridTemplateColumns: `repeat(${size}, 65px)`, gridTemplateRows: `repeat(${size}, 65px)`}}>
                 {/* {tiles.map((tile) => (
                     <Tile key={tile.name} id={tile.id} type={tile.type} imgPath={tile.imgPath} />
