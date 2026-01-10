@@ -1,7 +1,6 @@
 import express from "express";
 
-import express from "express";
-import { readInfoJson, normalizeTiles } from "../data/storeJson.mjs";
+import { readInfoJson, normalizeTiles, normalizeSolutions } from "../data/storeJson.mjs";
 
 const router = express.Router();
 
