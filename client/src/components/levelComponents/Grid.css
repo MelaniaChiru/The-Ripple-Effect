@@ -1,0 +1,13 @@
+#grid-section {
+    height: 100%;
+    background-color: aqua;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#tiles {
+    display: flex;
+    background-color: lightgray;
+}
