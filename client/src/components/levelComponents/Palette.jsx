@@ -18,7 +18,7 @@ function Palette() {
     };
 
     return (
-        <aside id="palette">
+        <aside class="palette" id="palette">
             <h3>Palette</h3>
             <div className="palette-items">
                 {items.map((it) => (
