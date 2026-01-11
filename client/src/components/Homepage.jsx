@@ -12,9 +12,12 @@ const Homepage = ({setCurrentPage}) => {
 
       {/* Main Content */}
       <main className="home-content">
-        <h1>
-          THE <br /> RIPPLE <br /> EFFECT
-        </h1>
+        <div className="headings-wrapper">
+          <h1>
+            THE <br /> RIPPLE <br /> EFFECT
+          </h1>
+          <h2>Balance is key</h2>
+        </div>
 
         <button className="homepage__button" onClick={()=>{setCurrentPage("level-selection")}}>
           Start Playing

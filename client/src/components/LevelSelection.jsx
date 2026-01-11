@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import '../styles/LevelSelection.css';
 import LevelSelectionTile from './LevelSelectionTile';
 
-function LevelSelection({ setCurrentPage }) {
+function LevelSelection({ setCurrentPage, showIntro, setShowIntro }) {
     const levelsArr = [1, 2, 3];
 
     // --- COOKIE HELPERS (Moved to top for safety) ---
@@ -65,6 +65,10 @@ function LevelSelection({ setCurrentPage }) {
 		}
 	}
 
+    function closeIntro(){
+        setShowIntro(false);
+    }
+
     return (
         <div className="level-selection-screen">
             <button className="back-arrow" onClick={() => setCurrentPage("homepage")}>
@@ -85,6 +89,37 @@ function LevelSelection({ setCurrentPage }) {
                     ))}
                 </div>
             </div>
+
+            {showIntro && (
+                <div className="modal-overlay">
+                    <div className="level-selection__pop-up">
+                        <h1>Welcome to A Better World</h1>
+                        <h2>Success isn't measured by how much we build, but by how well we live together.</h2>
+                        
+                        <div className="pop-up__content">
+                        <p>
+                            In <strong>The Ripple Effect</strong>, you are the architect of harmony. 
+                            Every choice you make sends waves through the community.
+                        </p>
+
+                        <h3>How to Play</h3>
+                        <ul>
+                            <li><strong>Place Tiles:</strong> Drag elements from your palette onto the grid to change the world.</li>
+                            <li><strong>Watch the Ripples:</strong> Pay close attention to where you place your tiles. Positive connections create growth; negative ones cause friction.</li>
+                            <li><strong>Find the Harmony:</strong> Your goal isn't to maximize one stat, but to find balance.</li>
+                            <li><strong>Your Mission:</strong> Bring the stats into the <span>Golden Zone (75–100)</span>. If one gets too low, the harmony is broken.</li>
+                        </ul>
+                        </div>
+
+                        <h4>But be careful, you must place all available tiles from your palette to complete the level.</h4>
+
+                        <button className="pop-up__close-btn" onClick={closeIntro}>
+                        Let's Begin
+                        </button>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }
