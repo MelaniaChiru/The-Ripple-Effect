@@ -1,18 +1,42 @@
-#grid-section {
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 24px;
-    padding: 24px;
+.grid-section {
+    display: grid;
+    grid-template-areas:
+    "tiles stats"
+    "tiles palette"
+    "tiles palette";
+    padding: 2rem;
 }
 
-#palette {
-    width: 140px;
-    background: #f3f3f3;
-    padding: 12px;
+.tiles{
+    grid-area: tiles;
+    display: grid;
+    background-color: #BAD494;
+    padding: 1rem;
     border-radius: 6px;
+    gap: 0.5rem;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+}
+
+.palette{
+    grid-area: palette;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    height: fit-content;
+    place-self: center;
+}
+
+.stats-container{
+    grid-area: stats;
+    background-color: rgba(255, 0, 0, .3);
 }
 
 .palette-item {
@@ -26,27 +50,23 @@
     cursor: grab;
 }
 
-#tiles {
-    display: grid;
-    background-color: #33b847;
-    padding: 8px;
-    border-radius: 6px;
+.palette-item img{
+    padding: 0.25rem;
+    border: 2px dotted #3A3A2E;
+    border-radius: 10px;
+    width: 20%;
 }
 
 .tile {
-    width: 65px;
-    height: 65px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #d9cda0;
+    border-radius: 0.25rem;
+    background-color: #F1E7D3;
 }
 
 .tile.drag-over {
-    outline: 3px dashed #ada172;
+    outline: 3px dashed #94886B;
 }
 
 .tile.fixed {
@@ -67,9 +87,9 @@
 }
 
 .empty-placeholder {
-    width: 40px;
-    height: 40px;
-    background: #ada172;
+    width: 70%;
+    height: 70%;
+    background: #DDCBA0;
     border-radius: 4px;
 }
 
@@ -103,4 +123,16 @@
 .palette-count {
     font-weight: bold;
     margin-left: 6px;
+}
+
+/* Level complete banner */
+.level-complete {
+    margin-top: 12px;
+    padding: 10px;
+    background: linear-gradient(90deg, #d4f5d4, #ffffff);
+    border: 1px solid #8bc34a;
+    border-radius: 6px;
+    color: #2e7d32;
+    font-weight: 700;
+    text-align: center;
 }

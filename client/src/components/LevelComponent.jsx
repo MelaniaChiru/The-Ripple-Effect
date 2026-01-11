@@ -1,4 +1,5 @@
 import Grid from "./levelComponents/Grid";
+import '../styles/LevelComponent.css'
 import { useEffect, useState } from "react";
 
 function LevelComponent({ level, setCurrentPage }) {
@@ -17,12 +18,11 @@ function LevelComponent({ level, setCurrentPage }) {
 	}, [level]);
 
 	return (
-		<div>
+		<div className="level-component">
 			<button className="back-arrow" onClick={() => setCurrentPage("level-selection")}>
                 <span>&#11013;</span> <span>Back to levels</span>
             </button>
-
-			Level {level}
+			<h1>Level {level}</h1>
 			{levelInfo && <Grid levelInfo={levelInfo} />}
 
 		</div>

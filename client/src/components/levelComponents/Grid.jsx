@@ -5,6 +5,7 @@ import House from '../../assets/images/house.png';
 import Park from '../../assets/images/park.png';
 import School from '../../assets/images/school.png';
 import '../../styles/grid.css';
+import StatsBar from './StatsBar.jsx';
 
 function Grid({levelInfo}) {
     const GRID_SIZE = 6; // grid is always 6x6 per requirements
@@ -67,6 +68,9 @@ function Grid({levelInfo}) {
     const [tiles, setTiles] = useState(seededTiles);
     const [counts, setCounts] = useState(computeCounts());
 
+    // base stats for the level (fallback to 40 if not provided)
+    const BASE_STATS = levelInfo?.baseStats ?? { happiness: 40, environment: 40 };
+
     const [highlightedIds, setHighlightedIds] = useState([]);
     const [highlightCenter, setHighlightCenter] = useState(null);
     const RADIUS_MAP = { park: 1, school: 2 };
@@ -88,6 +92,51 @@ function Grid({levelInfo}) {
         });
         return ids;
     };
+
+    // derive stats from placed tiles and level definitions
+    const stats = React.useMemo(() => {
+        let happiness = BASE_STATS.happiness ?? 40;
+        let environment = BASE_STATS.environment ?? 40;
+
+        // environment: always applied per placed tile using tile definition effect
+        for (const t of tiles) {
+            if (!t.type) continue;
+            const def = levelTiles.find((lt) => lt.type === t.type);
+            if (def && def.effect) {
+                environment += def.effect.environment ?? 0;
+            }
+        }
+
+        // happiness: only from parks/schools and only counts houses in their radius
+        for (const t of tiles) {
+            if (!t.type) continue;
+            if (t.type === 'park' || t.type === 'school') {
+                const def = levelTiles.find((lt) => lt.type === t.type);
+                if (def && def.effect) {
+                    const radius = RADIUS_MAP[t.type] ?? 0;
+                    const affected = getAffectedHouseIds(t.id, radius);
+                    const perHouse = def.effect.happiness ?? 0;
+                    // add per-house happiness for each affected house
+                    happiness += perHouse * affected.length;
+                }
+            }
+        }
+
+        // clamp to [0,100]
+        environment = Math.max(0, Math.min(100, environment));
+        happiness = Math.max(0, Math.min(100, happiness));
+        return { environment, happiness };
+    }, [tiles, levelTiles, BASE_STATS.happiness, BASE_STATS.environment]);
+
+    const [levelComplete, setLevelComplete] = useState(false);
+
+    React.useEffect(() => {
+        // require that there are no remaining tiles in the palette (all placed)
+        const allPlaced = Object.values(counts).every((c) => c === 0);
+        setLevelComplete(allPlaced && stats.environment >= 70 && stats.happiness >= 70);
+    }, [stats.environment, stats.happiness, counts]);
+
+
 
     const clearHighlights = () => {
         setHighlightedIds([]);
@@ -242,12 +291,18 @@ function Grid({levelInfo}) {
     };
 
     return ( 
-        <section id='grid-section'>
-            <Palette counts={counts} />
-            <div id='tiles' onDragOver={handleDragOver} onDrop={handleDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onClick={handleClick} style={{display: 'grid', gridTemplateColumns: `repeat(${cols}, 65px)`, gridTemplateRows: `repeat(${rows}, 65px)`, gap: '6px'}}>
+        <section class='grid-section'>
+            <div className="tiles" id='tiles' onDragOver={handleDragOver} onDrop={handleDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onClick={handleClick} >
                 {tiles.map((tile) => (
                     <Tile key={tile.id} id={tile.id} type={tile.type} imgPath={tile.imgPath} fixed={tile.fixed} highlighted={highlightedIds.includes(tile.id)} />
                 ))}
+            </div>
+            <Palette counts={counts} />
+            <div className="stats-container">
+                <StatsBar happiness={stats.happiness} environment={stats.environment} />
+                {levelComplete && (
+                    <div className="level-complete">✅ Level Complete! Both Environment and Happiness ≥ 70</div>
+                )}
             </div>
         </section>
     );
