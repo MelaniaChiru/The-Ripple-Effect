@@ -6,7 +6,7 @@ import tilesRoutes from "./routes/tiles.js";
 
 const app = express();
 
-app.use(express.json());
+app.use(express.static("../client/dist"));
 
 app.use("/api", healthRoutes);
 app.use("/api", levelsRoutes);
