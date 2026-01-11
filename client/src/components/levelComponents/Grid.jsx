@@ -4,6 +4,10 @@ import Palette from './Palette.jsx';
 import House from '../../assets/images/house.png';
 import Park from '../../assets/images/park.png';
 import School from '../../assets/images/school.png';
+import Factory from '../../assets/images/factory.png';
+import Windmill from '../../assets/images/wind-turbine.png';
+import Powerplant from '../../assets/images/wind-turbine.png';
+
 import '../../styles/grid.css';
 import StatsBar from './StatsBar.jsx';
 
@@ -45,6 +49,9 @@ function Grid({levelInfo}) {
             case 'house': return House;
             case 'park': return Park;
             case 'school': return School;
+            case 'factory': return Factory;
+            case 'windmill': return Windmill;
+            case 'powerplant': return Powerplant;
             default: return House;
         }
     };
@@ -95,7 +102,7 @@ function Grid({levelInfo}) {
 
     // derive stats from placed tiles and level definitions
     const stats = React.useMemo(() => {
-    let happiness = BASE_STATS.happiness ?? 40;
+        let happiness = BASE_STATS.happiness ?? 40;
         let environment = BASE_STATS.environment ?? 40;
 
         // environment: always applied per placed tile using tile definition effect
