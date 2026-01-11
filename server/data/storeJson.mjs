@@ -21,6 +21,7 @@ export function normalizeTiles(tiles = []) {
       id: tile.name,
       type,
       img: tile.img,
+      baseStats: tile.baseStats,
       tileColour: tile.tileColour || null,
       position: { r: pos[0], c: pos[1] },
       effect: tile.effect
