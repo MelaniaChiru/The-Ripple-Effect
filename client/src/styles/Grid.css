@@ -100,12 +100,22 @@
     position: relative;
 }
 
+/* negative highlight (e.g., factory pollution) */
+.tile.radius-highlight.negative {
+    outline: 4px solid rgba(255, 99, 71, 0.85);
+    background: linear-gradient(180deg, rgba(255,99,71,0.10), rgba(255,99,71,0.04));
+}
+
 .radius-overlay {
     position: absolute;
     inset: 0;
     border-radius: 4px;
     box-shadow: 0 0 0 2px rgba(255,235,59,0.18) inset;
     pointer-events: none;
+}
+
+.radius-overlay.negative {
+    box-shadow: 0 0 0 2px rgba(255,99,71,0.22) inset;
 }
 
 .tile img {
