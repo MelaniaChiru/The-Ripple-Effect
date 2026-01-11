@@ -235,7 +235,7 @@ function Grid({levelInfo, setCurrentPage}) {
             if (t.type === 'golf') {
                 // golf: global happiness bonus regardless of position
                 happiness += def.effect.happiness ?? 0;
-            } else if (['park', 'school', 'factory', 'bus', 'recycle', 'powerplant', 'windmill', 'garden', 'skyscraper', 'jet'].includes(t.type)) {
+            } else if (['park', 'school', 'factory', 'bus', 'recycle', 'powerplant', 'garden', 'skyscraper', 'jet'].includes(t.type)) {
                 const radius = RADIUS_MAP[t.type] ?? 0;
                 const affected = getAffectedHouseIds(t.id, radius);
                 const perHouseHappiness = def.effect.happiness ?? 0;
@@ -353,7 +353,7 @@ function Grid({levelInfo, setCurrentPage}) {
             if (!data) return;
             const payload = JSON.parse(data);
             const rType = payload.type;
-            if (['park', 'school', 'factory', 'bus', 'recycle', 'powerplant', 'windmill', 'garden', 'skyscraper', 'jet', 'golf'].includes(rType)) {
+            if (['park', 'school', 'factory', 'bus', 'recycle', 'powerplant', 'garden', 'skyscraper', 'jet', 'golf'].includes(rType)) {
                 const radius = RADIUS_MAP[rType];
                 const ids = getAffectedHouseIds(tileEl.id, radius); // This now uses the global logic
                 setHighlightedIds(ids);
@@ -373,7 +373,7 @@ function Grid({levelInfo, setCurrentPage}) {
             if (!data) return;
             const payload = JSON.parse(data);
             const rType = payload.type;
-            if (['park', 'school', 'factory', 'bus', 'recycle', 'powerplant', 'windmill', 'garden', 'skyscraper', 'jet', 'golf'].includes(rType)) {
+            if (['park', 'school', 'factory', 'bus', 'recycle', 'powerplant', 'garden', 'skyscraper', 'jet', 'golf'].includes(rType)) {
                 const radius = RADIUS_MAP[rType];
                 const ids = getAffectedHouseIds(tile?.id, radius);
                 setHighlightedIds(ids);
