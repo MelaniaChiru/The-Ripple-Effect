@@ -3,7 +3,7 @@ import '../styles/LevelSelection.css';
 import LevelSelectionTile from './LevelSelectionTile';
 
 function LevelSelection({ setCurrentPage, showIntro, setShowIntro }) {
-    const levelsArr = [1, 2, 3];
+    const levelsArr = [1, 2, 3, 4];
 
     // --- COOKIE HELPERS (Moved to top for safety) ---
     const readProgressFromCookie = () => {
