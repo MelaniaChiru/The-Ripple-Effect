@@ -101,6 +101,8 @@ function LevelSelection({ setCurrentPage, showIntro, setShowIntro }) {
                         </ul>
                         </div>
 
+                        <h4>But be careful, you must place all available tiles from your palette to complete the level.</h4>
+
                         <button className="pop-up__close-btn" onClick={closeIntro}>
                         Let's Begin
                         </button>

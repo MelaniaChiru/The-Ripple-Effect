@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 function LevelComponent({ level, setCurrentPage }) {
 	const [levelInfo, setLevelInfo] = useState(null);
+    const [showInfo, setShowInfo] = useState(true);
+
 	useEffect(() => {
 		async function fetchLevel() {
 			try {
@@ -17,6 +19,10 @@ function LevelComponent({ level, setCurrentPage }) {
 		fetchLevel();
 	}, [level]);
 
+	function closeInfo(){
+		setShowInfo(false);
+	}
+
 	return (
 		<div className="level-component">
 			<button className="back-arrow" onClick={() => setCurrentPage("level-selection")}>
@@ -25,7 +31,7 @@ function LevelComponent({ level, setCurrentPage }) {
 			<h1>Level {level}</h1>
 			{levelInfo && <Grid levelInfo={levelInfo} />}
 
-			{level == "1" && (
+			{level == "1" && showInfo &&(
 				<div className="modal-overlay">
 					<div className="level-selection__pop-up">
 						<h1>Level 1: The First Neighborhood</h1>
@@ -38,7 +44,7 @@ function LevelComponent({ level, setCurrentPage }) {
 								<li>🏫 Schools: Education is vital, but building them takes a <strong>toll on the Environment</strong>. However, their ripple is large! They boost Happiness for every House within <strong>2 tiles</strong>.</li>
 							</ul>
 						</div>
-						<button className="pop-up__close-btn" onClick={()=>{console.log("Close")}}>
+						<button className="pop-up__close-btn" onClick={closeInfo}>
 						Let's Begin
 						</button>
 					</div>
