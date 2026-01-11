@@ -106,7 +106,7 @@ function Grid({levelInfo, setCurrentPage}) {
     const [highlightedIds, setHighlightedIds] = useState([]);
     const [highlightCenter, setHighlightCenter] = useState(null);
     const [highlightType, setHighlightType] = useState(null); // 'positive' | 'negative' | null
-    const RADIUS_MAP = { park: 1, school: 2, factory: 1, recycle: 1, bus: 3, powerplant: 2, windmill: 1, garden: 1, skyscraper: 3, jet: 3, golf: 0 };
+    const RADIUS_MAP = { park: 1, school: 2, factory: 1, recycle: 1, bus: 3, powerplant: 2, windmill: 1, garden: 1, skyscraper: 3, jet: 3, golf: 99 };
 
     const getPosFromId = (id) => {
         const idx = Number(id.split('-')[1]) - 1;
@@ -115,12 +115,18 @@ function Grid({levelInfo, setCurrentPage}) {
 
     const getAffectedHouseIds = (centerId, radius) => {
         if (!centerId) return [];
+        
+        // NEW: If global radius, return all houses
+        if (radius === 99) {
+            return tiles.filter(t => t.type === 'house').map(t => t.id);
+        }
+
         const center = getPosFromId(centerId);
         const ids = [];
         tiles.forEach((t) => {
             if (t.type !== 'house') return;
             const pos = getPosFromId(t.id);
-            const dist = Math.abs(pos.r - center.r) + Math.abs(pos.c - center.c); // Manhattan distance
+            const dist = Math.abs(pos.r - center.r) + Math.abs(pos.c - center.c);
             if (dist <= radius) ids.push(t.id);
         });
         return ids;
@@ -347,11 +353,10 @@ function Grid({levelInfo, setCurrentPage}) {
             if (!data) return;
             const payload = JSON.parse(data);
             const rType = payload.type;
-            if (['park', 'school', 'factory', 'bus', 'recycle', 'powerplant', 'windmill', 'garden', 'skyscraper', 'jet'].includes(rType)) {
+            if (['park', 'school', 'factory', 'bus', 'recycle', 'powerplant', 'windmill', 'garden', 'skyscraper', 'jet', 'golf'].includes(rType)) {
                 const radius = RADIUS_MAP[rType];
-                const ids = getAffectedHouseIds(tileEl.id, radius);
+                const ids = getAffectedHouseIds(tileEl.id, radius); // This now uses the global logic
                 setHighlightedIds(ids);
-                // negative impact types
                 setHighlightType((['factory', 'powerplant', 'skyscraper', 'jet'].includes(rType)) ? 'negative' : 'positive');
             }
         } catch (err) {
@@ -368,7 +373,7 @@ function Grid({levelInfo, setCurrentPage}) {
             if (!data) return;
             const payload = JSON.parse(data);
             const rType = payload.type;
-            if (['park', 'school', 'factory', 'bus', 'recycle', 'powerplant', 'windmill', 'garden', 'skyscraper', 'jet'].includes(rType)) {
+            if (['park', 'school', 'factory', 'bus', 'recycle', 'powerplant', 'windmill', 'garden', 'skyscraper', 'jet', 'golf'].includes(rType)) {
                 const radius = RADIUS_MAP[rType];
                 const ids = getAffectedHouseIds(tile?.id, radius);
                 setHighlightedIds(ids);
@@ -463,10 +468,11 @@ function Grid({levelInfo, setCurrentPage}) {
             const tileEl = e.target.parentNode;
             const type = tileEl.getAttribute('data-type');
 
-            // if clicking on park/school/factory/bus/recycle on the grid, show effected houses
-            if (type === 'park' || type === 'school' || type === 'factory' || type === 'bus' || type === 'recycle') {
+            // Add 'golf', 'garden', 'skyscraper', and 'jet' to this list!
+            const interactiveTypes = ['park', 'school', 'factory', 'bus', 'recycle', 'garden', 'skyscraper', 'jet', 'golf'];
+
+            if (interactiveTypes.includes(type)) {
                 const radius = RADIUS_MAP[type];
-                // toggle if same center
                 if (highlightCenter === tileEl.id) {
                     clearHighlights();
                     return;
@@ -474,16 +480,14 @@ function Grid({levelInfo, setCurrentPage}) {
                 const ids = getAffectedHouseIds(tileEl.id, radius);
                 setHighlightedIds(ids);
                 setHighlightCenter(tileEl.id);
-                setHighlightType(type === 'factory' ? 'negative' : 'positive');
+
+                // Golf is not in the negative list, so it will default to 'positive' (green)
+                const negativeTypes = ['factory', 'powerplant', 'skyscraper', 'jet'];
+                setHighlightType(negativeTypes.includes(type) ? 'negative' : 'positive');
                 return;
             }
-
-            // otherwise log click and clear highlights
-            const tile = tileEl;
-            console.log(`Tile ID: ${tile.id}, Type: ${tile.getAttribute('data-type')}`);
             clearHighlights();
         } else {
-            // click outside tiles clears highlight
             clearHighlights();
         }
     };
