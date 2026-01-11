@@ -58,7 +58,7 @@ function Grid({levelInfo, setCurrentPage}) {
             case 'park': return Park;
             case 'school': return School;
             case 'factory': return Factory;
-            case 'windmill': return WindTurbine;
+            case 'windturbine': return WindTurbine;
             case 'powerplant': return NuclearPowerPlant;
             case 'recycle': return Recycle;
             case 'bus': return Bus;
@@ -106,7 +106,7 @@ function Grid({levelInfo, setCurrentPage}) {
     const [highlightedIds, setHighlightedIds] = useState([]);
     const [highlightCenter, setHighlightCenter] = useState(null);
     const [highlightType, setHighlightType] = useState(null); // 'positive' | 'negative' | null
-    const RADIUS_MAP = { park: 1, school: 2, factory: 1, recycle: 1, bus: 3, powerplant: 2, windmill: 1, garden: 1, skyscraper: 3, jet: 3, golf: 99 };
+    const RADIUS_MAP = { park: 1, school: 2, factory: 1, recycle: 1, bus: 3, powerplant: 2, windturbine: 1, garden: 1, skyscraper: 3, jet: 3, golf: 99 };
 
     const getPosFromId = (id) => {
         const idx = Number(id.split('-')[1]) - 1;

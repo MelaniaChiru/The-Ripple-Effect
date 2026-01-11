@@ -18,14 +18,14 @@ const items = [
     { type: 'school', imgPath: School, label: 'School' },
     { type: 'park', imgPath: Park, label: 'Park' },
     { type: 'factory', imgPath: Factory, label: 'Factory' },
-    { type: 'windmill', imgPath: WindTurbine, label: 'Windmill' },
+    { type: 'windmill', imgPath: WindTurbine, label: 'Wind Turbine' },
     { type: 'powerplant', imgPath: NuclearPowerPlant, label: 'Power Plant' },
     { type: 'recycle', imgPath: Recycle, label: 'Recycle' },
     { type: 'bus', imgPath: Bus, label: 'Bus' },
     { type: 'skyscraper', imgPath: SkyScraper, label: 'Skyscraper' },
     { type: 'golf', imgPath: Golf, label: 'Golf Course' },
-    { type: 'jet', imgPath: Jet, label: 'Jet' },
-    { type: 'garden', imgPath: Garden, label: 'Garden' },
+    { type: 'jet', imgPath: Jet, label: 'Private Jet' },
+    { type: 'garden', imgPath: Garden, label: 'Roof Top Garden' },
 ];
 
 function Palette({ counts = {} }) {
