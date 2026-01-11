@@ -33,7 +33,7 @@ function Palette({ counts = {} }) {
 
     return (
         <aside className="palette" id="palette">
-            <h3>Palette</h3>
+            <h3>Drag & Drop the tiles</h3>
             <div className="palette-items">
                 {items
                     // 2. Filter the items list to only show types present in 'counts'

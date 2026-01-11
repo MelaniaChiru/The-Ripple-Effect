@@ -7,7 +7,7 @@
   border-radius: 15px;
   backdrop-filter: blur(5px);
   width: 100%;
-  max-width: 400px;
+   max-width: 600px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   height: fit-content;
   place-self: center;
