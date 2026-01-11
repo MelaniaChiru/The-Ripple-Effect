@@ -61,13 +61,13 @@ function LevelComponent({ level, setCurrentPage }) {
 							New Tiles:
 							<ul>
 								<li>
-									🏭 Factory: Essential for wealth <strong>(+Economy)</strong>, but heavy on nature <strong>(-Environment)</strong>. Keep them away from people! They cause deep <strong>unhappiness</strong> to any house within <strong>1 tile</strong>.
+									🏭 Factory: Essential for wealth <strong className="econ">(+Economy)</strong>, but heavy on nature <strong className="env">(-Environment)</strong>. Keep them away from people! They cause deep <strong className="h">unhappiness</strong> to any house within <strong className="h">1 tile</strong>.
 								</li>
 								<li>
-									♻️ Recycling: A gift to the earth <strong>(+Environment)</strong>. People love living near sustainable hubs—it <strong>boosts happiness within 1 tile</strong>.
+									♻️ Recycling: A gift to the earth <strong className="env">(+Environment)</strong>. People love living near sustainable hubs—it <strong className="h">boosts happiness within 1 tile</strong>.
 								</li>
 								<li>
-									🚌 Bus Stop: The ultimate connector. It helps the <strong>Economy</strong> and <strong>Environment</strong> globally, and its <strong>positive ripple</strong> is massive, reaching houses within <strong>3 tiles</strong>.
+									🚌 Bus Stop: The ultimate connector. It helps the <strong className="econ">Economy</strong> and <strong className="env">Environment</strong> globally, and its <strong className="h">positive ripple</strong> is massive, reaching houses within <strong className="h">3 tiles</strong>.
 								</li>
 							</ul>
 						</div>
