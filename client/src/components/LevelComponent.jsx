@@ -101,6 +101,33 @@ function LevelComponent({ level, setCurrentPage }) {
 					</div>
 				</div>
 			)}
+
+			{level == "4" && showInfo &&(
+				<div className="modal-overlay">
+					<div className="level-selection__pop-up">
+						<h1>Level 4: High-Density Development</h1>
+						<h2>The word is out: people want to live in your world. The community is growing fast, and space is becoming a premium.</h2>
+
+						<div className="pop-up__content">
+							<span style={{ display: 'block', textAlign: 'center' }}>No New Tiles</span>
+							<ul>
+								<li>
+									🏘️ Growing Pains: With more houses on the grid, your placement must be pixel-perfect.
+								</li>
+								<li>
+									📍 Proximity is Power: Every school and park must now serve twice as many families to maintain the balance.
+								</li>
+								<li>
+									⚠️ The Squeeze: Be careful—with more residents, a single misplaced industrial tile will cause a much larger wave of unhappiness.
+								</li>
+							</ul>
+						</div>
+						<button className="pop-up__close-btn" onClick={closeInfo}>
+						Let's Begin
+						</button>
+					</div>
+				</div>
+			)}
 		</div>
 
 	);
