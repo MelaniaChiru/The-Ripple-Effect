@@ -72,6 +72,10 @@
   background: linear-gradient(90deg, #55efc4, #00b894);
 }
 
+.economy-fill {
+  background: linear-gradient(90deg, #74b9ff, #0984e3);
+}
+
 /* Visual cue for "Over-optimized" (Above 80) */
 .over-optimized {
   filter: saturate(1.5);

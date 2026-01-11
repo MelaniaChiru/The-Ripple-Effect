@@ -85,11 +85,12 @@ function Grid({levelInfo}) {
         const next = computeCounts();
         // console.debug so devs can see new counts when levels change
         console.debug("recomputed counts", next);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCounts(next);
     }, [levelTiles]);
 
     // base stats for the level (fallback to 40 if not provided)
-    const BASE_STATS = levelInfo?.baseStats ?? { happiness: 40, environment: 40 };
+    const BASE_STATS = levelInfo?.baseStats ?? { happiness: 40, environment: 40, economy: 40 };
 
     const [highlightedIds, setHighlightedIds] = useState([]);
     const [highlightCenter, setHighlightCenter] = useState(null);
@@ -119,6 +120,7 @@ function Grid({levelInfo}) {
     const stats = React.useMemo(() => {
         let happiness = BASE_STATS.happiness ?? 40;
         let environment = BASE_STATS.environment ?? 40;
+        let economy = BASE_STATS.economy ?? 40;
 
         // environment: always applied per placed tile using tile definition effect
         for (const t of tiles) {
@@ -143,20 +145,28 @@ function Grid({levelInfo}) {
                 }
             }
         }
+        for (const t of tiles) {
+            if (!t.type) continue;
+            const def = levelTiles.find((lt) => lt.type === t.type);
+            if (def && def.effect) {
+                economy += def.effect.economy ?? 0;
+            }
+        }
 
         // clamp to [0,100]
         environment = Math.max(0, Math.min(100, environment));
         happiness = Math.max(0, Math.min(100, happiness));
-        return { environment, happiness };
-    }, [tiles, levelTiles, BASE_STATS.happiness, BASE_STATS.environment]);
+        economy = Math.max(0, Math.min(100, economy));
+        return { environment, happiness, economy };
+    }, [tiles, levelTiles, BASE_STATS.happiness, BASE_STATS.environment, BASE_STATS.economy]);
 
     const [levelComplete, setLevelComplete] = useState(false);
 
     React.useEffect(() => {
         // require that there are no remaining tiles in the palette (all placed)
         const allPlaced = Object.values(counts).every((c) => c === 0);
-        setLevelComplete(allPlaced && stats.environment >= 70 && stats.happiness >= 70);
-    }, [stats.environment, stats.happiness, counts]);
+        setLevelComplete(allPlaced && stats.environment >= 75 && stats.happiness >= 75 && stats.economy >= 75);
+    }, [stats.environment, stats.happiness, stats.economy, counts]);
 
 
 
@@ -326,9 +336,9 @@ function Grid({levelInfo}) {
             </div>
             <Palette counts={counts} />
             <div className="stats-container">
-                <StatsBar happiness={stats.happiness} environment={stats.environment} />
+                <StatsBar happiness={stats.happiness} environment={stats.environment} economy={stats.economy} />
                 {levelComplete && (
-                    <div className="level-complete">✅ Level Complete! Both Environment and Happiness ≥ 70</div>
+                    <div className="level-complete">✅ Level Complete! Both Environment and Happiness ≥ 75</div>
                 )}
             </div>
         </section>
