@@ -468,8 +468,11 @@ function Grid({levelInfo, setCurrentPage}) {
             const tileEl = e.target.parentNode;
             const type = tileEl.getAttribute('data-type');
 
-            // Add 'golf', 'garden', 'skyscraper', and 'jet' to this list!
-            const interactiveTypes = ['park', 'school', 'factory', 'bus', 'recycle', 'garden', 'skyscraper', 'jet', 'golf'];
+            const interactiveTypes = [
+            'park', 'school', 'factory', 'bus', 'recycle', 
+            'garden', 'skyscraper', 'jet', 'golf', 
+            'powerplant'
+        ];
 
             if (interactiveTypes.includes(type)) {
                 const radius = RADIUS_MAP[type];
