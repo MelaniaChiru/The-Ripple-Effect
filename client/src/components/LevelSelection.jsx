@@ -14,15 +14,25 @@ function LevelSelection({ setCurrentPage }) {
             let c = ca[i].trim();
             if (c.indexOf(name) === 0) {
                 try {
-                    return JSON.parse(c.substring(name.length, c.length));
+                    const parsed = JSON.parse(c.substring(name.length, c.length)) || {};
+                    // normalize older format: { saved:..., completed: { "1": true } }
+                    if (parsed && typeof parsed === 'object') {
+                        if (parsed.completed && typeof parsed.completed === 'object') return parsed.completed;
+                        const filtered = {};
+                        for (const k of Object.keys(parsed)) {
+                            if (parsed[k] === true) filtered[k] = true;
+                        }
+                        return filtered;
+                    }
+                    return null;
                 } catch (e) {
-					console.error("An error occured:", e);
+                    console.error("Error parsing cookie JSON:", e);
                     return null;
                 }
             }
         }
-        return null; 
-    };
+        return null;
+    } 
 
     const saveLevelProgress = (completedLevels) => {
         const key = "game_progress";
@@ -35,7 +45,7 @@ function LevelSelection({ setCurrentPage }) {
 
     const [progress] = useState(() => {
         const savedData = readProgressFromCookie();
-        return savedData || { "1": true, "2": false, "3": false };
+        return savedData || { "1": true};
     });
 
     // 2. SYNC EFFECT: Only writes to cookie if it's missing
@@ -78,5 +88,4 @@ function LevelSelection({ setCurrentPage }) {
         </div>
     );
 }
-
 export default LevelSelection;
