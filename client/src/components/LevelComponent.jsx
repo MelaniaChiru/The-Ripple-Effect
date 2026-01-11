@@ -29,7 +29,7 @@ function LevelComponent({ level, setCurrentPage }) {
                 <span>&#11013;</span> <span>Back to levels</span>
             </button>
 			<h1>Level {level}</h1>
-			{levelInfo && <Grid levelInfo={levelInfo} />}
+			{levelInfo && <Grid levelInfo={levelInfo} setCurrentPage={setCurrentPage}/>}
 
 			{level == "1" && showInfo &&(
 				<div className="modal-overlay">

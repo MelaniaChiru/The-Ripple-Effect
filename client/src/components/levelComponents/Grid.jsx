@@ -19,7 +19,7 @@ import StatsBar from './StatsBar.jsx';
 
 
 
-function Grid({levelInfo}) {
+function Grid({levelInfo, setCurrentPage}) {
     const GRID_SIZE = 6; // grid is always 6x6 per requirements
     const rows = GRID_SIZE;
     const cols = GRID_SIZE;
@@ -489,26 +489,39 @@ function Grid({levelInfo}) {
     };
 
     return ( 
-        <section className='grid-section'>
-            <div className="tiles" id='tiles' onDragOver={handleDragOver} onDrop={handleDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onClick={handleClick} >
-                {tiles.map((tile) => (
-                    <Tile key={tile.id} id={tile.id} type={tile.type} imgPath={tile.imgPath} fixed={tile.fixed} highlighted={highlightedIds.includes(tile.id) ? highlightType : false} />
-                ))}
-            </div>
-            <Palette counts={counts} />
-            <div className="stats-container">
-                {levelInfo.id == 1 && 
-                    <StatsBar happiness={stats.happiness} environment={stats.environment} />
-                }
+        <>
+            <section className='grid-section'>
+                <div className="tiles" id='tiles' onDragOver={handleDragOver} onDrop={handleDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onClick={handleClick} >
+                    {tiles.map((tile) => (
+                        <Tile key={tile.id} id={tile.id} type={tile.type} imgPath={tile.imgPath} fixed={tile.fixed} highlighted={highlightedIds.includes(tile.id) ? highlightType : false} />
+                    ))}
+                </div>
+                <Palette counts={counts} />
+                <div className="stats-container">
+                    {levelInfo.id == 1 && 
+                        <StatsBar happiness={stats.happiness} environment={stats.environment} />
+                    }
 
-                {levelInfo.id > 1 && 
-                    <StatsBar happiness={stats.happiness} environment={stats.environment} economy={stats.economy} />
-                }
-                {levelComplete && (
-                    <div className="level-complete">✅ Level Complete! Environment, Happiness, Economy ≥ 75</div>
-                )}
-            </div>
-        </section>
+                    {levelInfo.id > 1 && 
+                        <StatsBar happiness={stats.happiness} environment={stats.environment} economy={stats.economy} />
+                    }
+                </div>
+            </section>
+            {levelComplete && (
+                <div className="level-complete">
+                    <div className="level-complete-card">
+                        <h1>Level Complete!</h1>
+                        <p>You've successfully balanced the needs of the community and the planet.</p>
+                        <button 
+                            className="next-level-btn"
+                            onClick={() => { setCurrentPage(`level-${levelInfo.id + 1}`) }}
+                        >
+                            Next Level
+                        </button>
+                    </div>
+                </div>
+            )}
+        </>
     );
 }
 
