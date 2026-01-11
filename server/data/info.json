@@ -3,12 +3,12 @@
             "levelNumber": 1,
             "gridSize": [2,2],
             "tiles": [
-                {"name" : "house-1", "img": "/client/src/assets/images/house.png", "postion": [2,3], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
-                {"name" : "house-2", "img": "/client/src/assets/images/house.png", "postion": [3,2], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
-                {"name" : "house-3", "img": "/client/src/assets/images/house.png", "postion": [3,4], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
-                {"name" : "school-1", "img": "/client/src/assets/images/school.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -5, "happiness": 5}},
-                {"name" : "park-1", "img": "/client/src/assets/images/park.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 20, "happiness": 10}},
-                {"name" : "park-2", "img": "/client/src/assets/images/park.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 20, "happiness": 10}}
+                {"name" : "house-1", "img": "/client/src/assets/images/house.png", "postion": [2,3], "tileColour": "green", "effect": {"environment": 0, "happiness": 0, "economy" : 0}},
+                {"name" : "house-2", "img": "/client/src/assets/images/house.png", "postion": [3,2], "tileColour": "green", "effect": {"environment": 0, "happiness": 0, "economy" : 0}},
+                {"name" : "house-3", "img": "/client/src/assets/images/house.png", "postion": [3,4], "tileColour": "green", "effect": {"environment": 0, "happiness": 0, "economy" : 0}},
+                {"name" : "school-1", "img": "/client/src/assets/images/school.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -5, "happiness": 5, "economy" : 50}},
+                {"name" : "park-1", "img": "/client/src/assets/images/park.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 20, "happiness": 10, "economy" : 0}},
+                {"name" : "park-2", "img": "/client/src/assets/images/park.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 20, "happiness": 10, "economy" : 0}}
             ],
             "solutions": [
                 {"id" : "school-1", "position": [1,2]},
@@ -19,17 +19,17 @@
             "levelNumber": 2,
             "gridSize": [6,6],
             "tiles": [
-                {"name" : "house-1", "img": "/client/src/assets/images/house.png", "postion": [2,3], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
-                {"name" : "house-2", "img": "/client/src/assets/images/house.png", "postion": [3,2], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
-                {"name" : "house-3", "img": "/client/src/assets/images/house.png", "postion": [3,4], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
-                {"name" : "house-4", "img": "/client/src/assets/images/house.png", "postion": [3,4], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
-                {"name" : "school-1", "img": "/client/src/assets/images/school.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -5, "happiness": 5}},
-                {"name" : "park-1", "img": "/client/src/assets/images/park.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 20, "happiness": 10}},
-                {"name" : "park-2", "img": "/client/src/assets/images/park.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 20, "happiness": 10}},
-                {"name" : "factory-1", "img": "/client/src/assets/images/factory.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -10, "happiness": -5}},
-                {"name" : "factory-2", "img": "/client/src/assets/images/factory.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -10, "happiness": -5}},
-                {"name" : "recycle-1", "img": "/client/src/assets/images/recycle.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 5, "happiness": 1}},
-                {"name" : "bus-1", "img": "/client/src/assets/images/bus.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 10, "happiness": 5}}
+                {"name" : "house-1", "img": "/client/src/assets/images/house.png", "postion": [2,3], "tileColour": "green", "effect": {"environment": 0, "happiness": 0, "economy": 0}},
+                {"name" : "house-2", "img": "/client/src/assets/images/house.png", "postion": [3,2], "tileColour": "green", "effect": {"environment": 0, "happiness": 0, "economy": 0}},
+                {"name" : "house-3", "img": "/client/src/assets/images/house.png", "postion": [3,4], "tileColour": "green", "effect": {"environment": 0, "happiness": 0, "economy": 0}},
+                {"name" : "house-4", "img": "/client/src/assets/images/house.png", "postion": [3,4], "tileColour": "green", "effect": {"environment": 0, "happiness": 0, "economy": 0}},
+                {"name" : "school-1", "img": "/client/src/assets/images/school.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -5, "happiness": 5, "economy": -2}},
+                {"name" : "park-1", "img": "/client/src/assets/images/park.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 20, "happiness": 5, "economy": 0}},
+                {"name" : "park-2", "img": "/client/src/assets/images/park.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 20, "happiness": 5, "economy": 0}},
+                {"name" : "factory-1", "img": "/client/src/assets/images/factory.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -10, "happiness": -5, "economy": 14}},
+                {"name" : "factory-2", "img": "/client/src/assets/images/factory.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -10, "happiness": -5, "economy": 14}},
+                {"name" : "recycle-1", "img": "/client/src/assets/images/recycle.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 10, "happiness": 3, "economy": 0}},
+                {"name" : "bus-1", "img": "/client/src/assets/images/bus.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 10, "happiness": 5, "economy": 10}}
 
             ],
             "solutions": [

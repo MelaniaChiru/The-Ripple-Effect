@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import Tile from './Tile.jsx';
 import Palette from './Palette.jsx';
@@ -85,11 +86,12 @@ function Grid({levelInfo}) {
         const next = computeCounts();
         // console.debug so devs can see new counts when levels change
         console.debug("recomputed counts", next);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCounts(next);
     }, [levelTiles]);
 
     // base stats for the level (fallback to 40 if not provided)
-    const BASE_STATS = levelInfo?.baseStats ?? { happiness: 40, environment: 40 };
+    const BASE_STATS = levelInfo?.baseStats ?? { happiness: 10, environment: 40, economy: 40 };
 
     const [highlightedIds, setHighlightedIds] = useState([]);
     const [highlightCenter, setHighlightCenter] = useState(null);
@@ -114,11 +116,119 @@ function Grid({levelInfo}) {
         return ids;
     };
 
+    // --- Helpers: completed cookie (minimal) and saved placements (localStorage) ---
+    const readCompletedFromCookie = () => {
+        if (typeof document === 'undefined') return {};
+        const name = 'game_progress=';
+        const found = document.cookie.split('; ').find((c) => c.startsWith(name));
+        if (!found) return {};
+        const raw = found.split('=').slice(1).join('=');
+        try {
+            const parsed = JSON.parse(raw) || {};
+            // normalize older formats: if cookie held { saved: ..., completed: {...} }
+            if (parsed && typeof parsed === 'object') {
+                if (parsed.completed && typeof parsed.completed === 'object') {
+                    return parsed.completed;
+                }
+                // If top-level mapping already matches { "1": true, ... } return only boolean-true entries
+                const filtered = {};
+                for (const k of Object.keys(parsed)) {
+                    if (parsed[k] === true) filtered[k] = true;
+                }
+                return filtered;
+            }
+            return {};
+        } catch (err) {
+            console.debug('Failed to parse game_progress cookie, resetting', err);
+            return {};
+        }
+    };
+
+    const writeCompletedToCookie = (completedObj) => {
+        if (typeof document === 'undefined') return;
+        try {
+            const cookieName = 'game_progress';
+            const expires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString(); // 1 year
+            // only store the completed mapping as plain JSON, e.g. {"1":true}
+            document.cookie = `${cookieName}=${JSON.stringify(completedObj)}; expires=${expires}; path=/; samesite=lax`;
+        } catch (err) {
+            console.error('Failed to write game_progress cookie', err);
+        }
+    };
+
+    const readSavedFromStorage = () => {
+        if (typeof window === 'undefined' || !window.localStorage) return {};
+        try {
+            const raw = window.localStorage.getItem('game_progress_saved');
+            if (!raw) return {};
+            return JSON.parse(raw) || {};
+        } catch (err) {
+            console.debug('Failed to parse saved progress from localStorage', err);
+            return {};
+        }
+    };
+
+    const writeSavedToStorage = (obj) => {
+        if (typeof window === 'undefined' || !window.localStorage) return;
+        try {
+            window.localStorage.setItem('game_progress_saved', JSON.stringify(obj));
+        } catch (err) {
+            console.error('Failed to write saved progress to localStorage', err);
+        }
+    };
+
+    // Try to restore saved placements for this level (if any) from localStorage
+    React.useEffect(() => {
+        if (!levelInfo) return;
+        const levelId = levelInfo?.id ?? levelInfo?.levelNumber;
+        if (!levelId) return;
+
+        const savedAll = readSavedFromStorage();
+        const saved = savedAll?.[String(levelId)];
+        if (!saved || !saved.placements) return; // nothing saved
+
+        // Apply saved placements
+        setTiles((prev) => {
+            const next = prev.map((t) => {
+                // don't overwrite fixed tiles
+                if (t.fixed) return t;
+                const savedType = saved.placements[t.id];
+                if (!savedType) return { ...t, type: null, imgPath: null };
+                return { ...t, type: savedType, imgPath: getImageForType(savedType) };
+            });
+
+            return next;
+        });
+
+        // recompute counts to reflect placements
+        setCounts((_prevCounts) => {
+            const base = computeCounts();
+            // adjust counts after setTiles has applied
+            setTimeout(() => {
+                setCounts((_cur) => {
+                    const copy = { ...base };
+                    // read current tiles state (after update)
+                    tiles.forEach((tile) => {
+                        if (!tile) return;
+                        if (tile.fixed) return; // fixed already accounted for
+                        if (!tile.type) return;
+                        copy[tile.type] = Math.max(0, (copy[tile.type] || 0) - 1);
+                    });
+                    setCounts(copy);
+                });
+            }, 0);
+
+            return base; // initial optimistic value until timeout adjustment
+        });
+
+    }, [levelInfo]);
+
     // derive stats from placed tiles and level definitions
     // eslint-disable-next-line react-hooks/preserve-manual-memoization
     const stats = React.useMemo(() => {
-        let happiness = BASE_STATS.happiness ?? 40;
+        let happiness = BASE_STATS.happiness ?? 0;
         let environment = BASE_STATS.environment ?? 40;
+        let economy = BASE_STATS.economy ?? 40;
 
         // environment: always applied per placed tile using tile definition effect
         for (const t of tiles) {
@@ -143,21 +253,67 @@ function Grid({levelInfo}) {
                 }
             }
         }
+        for (const t of tiles) {
+            if (!t.type) continue;
+            const def = levelTiles.find((lt) => lt.type === t.type);
+            if (def && def.effect) {
+                economy += def.effect.economy ?? 0;
+            }
+        }
 
         // clamp to [0,100]
         environment = Math.max(0, Math.min(100, environment));
         happiness = Math.max(0, Math.min(100, happiness));
-        return { environment, happiness };
-    }, [tiles, levelTiles, BASE_STATS.happiness, BASE_STATS.environment]);
+        economy = Math.max(0, Math.min(100, economy));
+        return { environment, happiness, economy };
+    }, [tiles, levelTiles, BASE_STATS.happiness, BASE_STATS.environment, BASE_STATS.economy]);
 
     const [levelComplete, setLevelComplete] = useState(false);
 
     React.useEffect(() => {
         // require that there are no remaining tiles in the palette (all placed)
         const allPlaced = Object.values(counts).every((c) => c === 0);
+        // debug values so we can see why completion may not trigger
+        console.debug('completion check:', { allPlaced, environment: stats.environment, happiness: stats.happiness, economy: stats.economy, counts });
+        // require Environment and Happiness >= 70 (economy not required for completion)
         setLevelComplete(allPlaced && stats.environment >= 70 && stats.happiness >= 70);
-    }, [stats.environment, stats.happiness, counts]);
+    }, [stats.environment, stats.happiness, stats.economy, counts]);
+    // When a level becomes complete, mark it in the `game_progress` cookie (completed mapping only) and also persist saved state to localStorage
+    React.useEffect(() => {
+        if (!levelComplete) return;
+        const levelId = levelInfo?.id ?? levelInfo?.levelNumber ?? null;
+        if (!levelId) return;
 
+        // update cookie with minimal map { "1": true, "2": true }
+        const current = readCompletedFromCookie();
+        // mark this level completed
+        current[String(levelId)] = true;
+        // also unlock the next level (e.g., completing 1 unlocks 2)
+        const nextLevel = String(Number(levelId) + 1);
+        current[nextLevel] = true;
+
+        // delete existing cookie then recreate it to avoid legacy payloads
+        const deleteCookie = (name) => {
+            try {
+                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; samesite=lax`;
+            } catch (err) {
+                console.error('Failed to delete cookie', err);
+            }
+        };
+        console.debug('Deleting existing game_progress cookie (before):', document.cookie);
+        deleteCookie('game_progress');
+        console.debug('After deletion:', document.cookie);
+
+        // write new minimal mapping
+        writeCompletedToCookie(current);
+        console.debug('Recreated game_progress cookie (after):', document.cookie);
+
+        // also persist saved info to localStorage for restoration (not in cookie)
+        const savedAll = readSavedFromStorage();
+        savedAll[String(levelId)] = savedAll[String(levelId)] || {};
+        savedAll[String(levelId)].completed = true;
+        writeSavedToStorage(savedAll);
+    }, [levelComplete, levelInfo, tiles, counts]);
 
 
     const clearHighlights = () => {
@@ -165,6 +321,31 @@ function Grid({levelInfo}) {
         setHighlightCenter(null);
         setHighlightType(null);
     };
+
+    // persist placements (and counts) to localStorage on any change so user can return later; cookie only stores completed map
+    React.useEffect(() => {
+        if (!levelInfo) return;
+        const levelId = levelInfo?.id ?? levelInfo?.levelNumber ?? null;
+        if (!levelId) return;
+
+        const savedAll = readSavedFromStorage();
+        savedAll[String(levelId)] = savedAll[String(levelId)] || {};
+
+        // store non-fixed tile placements
+        const placements = {};
+        tiles.forEach((t) => {
+            if (!t || !t.type) return;
+            if (t.fixed) return; // don't save fixed placements
+            placements[t.id] = t.type;
+        });
+        savedAll[String(levelId)].placements = placements;
+        savedAll[String(levelId)].counts = counts;
+        savedAll[String(levelId)].lastSaved = Date.now();
+
+        writeSavedToStorage(savedAll);
+        // debug log to confirm
+        console.debug('saved progress (localStorage) for level', levelId, savedAll[String(levelId)]);
+    }, [tiles, counts, levelInfo]);
 
     const handleDragOver = (e) => {
         e.preventDefault();
@@ -326,9 +507,9 @@ function Grid({levelInfo}) {
             </div>
             <Palette counts={counts} />
             <div className="stats-container">
-                <StatsBar happiness={stats.happiness} environment={stats.environment} />
+                <StatsBar happiness={stats.happiness} environment={stats.environment} economy={stats.economy} />
                 {levelComplete && (
-                    <div className="level-complete">✅ Level Complete! Both Environment and Happiness ≥ 70</div>
+                    <div className="level-complete">✅ Level Complete! Environment and Happiness ≥ 70</div>
                 )}
             </div>
         </section>
