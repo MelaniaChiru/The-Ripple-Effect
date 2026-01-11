@@ -95,7 +95,7 @@ function Grid({levelInfo}) {
     const [highlightedIds, setHighlightedIds] = useState([]);
     const [highlightCenter, setHighlightCenter] = useState(null);
     const [highlightType, setHighlightType] = useState(null); // 'positive' | 'negative' | null
-    const RADIUS_MAP = { park: 1, school: 2, factory: 1, recycle: 1, bus: 3 };
+    const RADIUS_MAP = { park: 1, school: 2, factory: 1, recycle: 1, bus: 3,  powerplant: 2, windmill: 1};
 
     const getPosFromId = (id) => {
         const idx = Number(id.split('-')[1]) - 1;
@@ -134,7 +134,7 @@ function Grid({levelInfo}) {
         // happiness: from parks, schools, factories, bus, and recycle -- counts houses in their radius
         for (const t of tiles) {
             if (!t.type) continue;
-            if (t.type === 'park' || t.type === 'school' || t.type === 'factory' || t.type === 'bus' || t.type === 'recycle') {
+            if (t.type === 'park' || t.type === 'school' || t.type === 'factory' || t.type === 'bus' || t.type === 'recycle' || t.type === 'powerplant' || t.type === 'windmill') {
                 const def = levelTiles.find((lt) => lt.type === t.type);
                 if (def && def.effect) {
                     const radius = RADIUS_MAP[t.type] ?? 0;
@@ -186,7 +186,7 @@ function Grid({levelInfo}) {
             if (!data) return;
             const payload = JSON.parse(data);
             const rType = payload.type;
-            if (rType === 'park' || rType === 'school' || rType === 'factory' || rType === 'bus' || rType === 'recycle') {
+            if (rType === 'park' || rType === 'school' || rType === 'factory' || rType === 'bus' || rType === 'recycle' || rType === 'powerplant' || rType === 'windmill') {
                 const radius = RADIUS_MAP[rType];
                 const ids = getAffectedHouseIds(tileEl.id, radius);
                 setHighlightedIds(ids);
@@ -211,7 +211,7 @@ function Grid({levelInfo}) {
                 const radius = RADIUS_MAP[rType];
                 const ids = getAffectedHouseIds(tile?.id, radius);
                 setHighlightedIds(ids);
-                setHighlightType(rType === 'factory' ? 'negative' : 'positive');
+                setHighlightType((rType === 'factory' || rType === 'powerplant') ? 'negative' : 'positive');
             }
         } catch (err) {
             console.error(err);
