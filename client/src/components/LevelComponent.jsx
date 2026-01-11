@@ -50,6 +50,33 @@ function LevelComponent({ level, setCurrentPage }) {
 					</div>
 				</div>
 			)}
+
+			{level == "2" && showInfo &&(
+				<div className="modal-overlay">
+					<div className="level-selection__pop-up">
+						<h1>Level 2: The Industrial Pulse</h1>
+						<h2>As our world grows, so does our need for a thriving <strong>Economy</strong>. But progress often comes at a cost.</h2>
+
+						<div className="pop-up__content">
+							New Tiles:
+							<ul>
+								<li>
+									🏭 Factory: Essential for wealth <strong>(+Economy)</strong>, but heavy on nature <strong>(-Environment)</strong>. Keep them away from people! They cause deep <strong>unhappiness</strong> to any house within <strong>1 tile</strong>.
+								</li>
+								<li>
+									♻️ Recycling: A gift to the earth <strong>(+Environment)</strong>. People love living near sustainable hubs—it <strong>boosts happiness within 1 tile</strong>.
+								</li>
+								<li>
+									🚌 Bus Stop: The ultimate connector. It helps the <strong>Economy</strong> and <strong>Environment</strong> globally, and its <strong>positive ripple</strong> is massive, reaching houses within <strong>3 tiles</strong>.
+								</li>
+							</ul>
+						</div>
+						<button className="pop-up__close-btn" onClick={closeInfo}>
+						Let's Begin
+						</button>
+					</div>
+				</div>
+			)}
 		</div>
 
 	);
