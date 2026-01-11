@@ -1,7 +1,7 @@
 import LockIcon from '../assets/icons/lock-icon.svg';
 
 function LevelSelectionTile({ levelId, isUnlocked, index, onClick }) {
-    const sideClass = index % 2 === 0 ? "left-side" : "right-side";
+    const sideClass = index % 2 === 0 ? "right-side" : "left-side";
 
 	function handleInternalClick(e) {
         if (isUnlocked) {
