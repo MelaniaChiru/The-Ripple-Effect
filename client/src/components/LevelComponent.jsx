@@ -39,9 +39,9 @@ function LevelComponent({ level, setCurrentPage }) {
 
 						<div className="pop-up__content">
 							<ul>
-								<li>🏡 Houses: These families are already settled. You <strong>cannot move them</strong>, but you can improve their lives!</li>
-								<li>🌳 Parks:Nature is pure. Placing a Park anywhere <strong>boosts the Environment</strong>. If a House is within <strong>1 tile</strong>, its Happiness will rise.</li>
-								<li>🏫 Schools: Education is vital, but building them takes a <strong>toll on the Environment</strong>. However, their ripple is large! They boost Happiness for every House within <strong>2 tiles</strong>.</li>
+								<li>🏡 Houses: These families are already settled. You <strong className="underline">cannot move them</strong>, but you can improve their lives!</li>
+								<li>🌳 Parks: Nature is pure. Placing a Park anywhere <strong className="env">boosts the Environment</strong>. If a House is within <strong className="h">1 tile</strong>, its Happiness will rise.</li>
+								<li>🏫 Schools: Education is vital, but building them takes a <strong className="env">toll on the Environment</strong>. However, their ripple is large! They boost Happiness for every House within <strong className="h">2 tiles</strong>.</li>
 							</ul>
 						</div>
 						<button className="pop-up__close-btn" onClick={closeInfo}>
