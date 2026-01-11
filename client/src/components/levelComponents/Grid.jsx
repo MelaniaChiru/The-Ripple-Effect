@@ -226,7 +226,7 @@ function Grid({levelInfo}) {
     // derive stats from placed tiles and level definitions
     // eslint-disable-next-line react-hooks/preserve-manual-memoization
     const stats = React.useMemo(() => {
-        let happiness = BASE_STATS.happiness ?? 0;
+        let happiness = BASE_STATS.happiness ?? 10;
         let environment = BASE_STATS.environment ?? 40;
         let economy = BASE_STATS.economy ?? 40;
 
