@@ -5,7 +5,7 @@ import LevelSelection from './LevelSelection'
 import LevelComponent from './LevelComponent'
 
 function App() {
-  const [currentPage, setCurrentPage] = useState("level-2");  
+  const [currentPage, setCurrentPage] = useState("level-4");  
   const [showIntro, setShowIntro] = useState(true);
 
   return (
