@@ -38,23 +38,30 @@
             "levelNumber": 3,
             "gridSize": [6,6],
             "tiles": [
-                {"name" : "house-1", "img": "/client/src/assets/images/house.png", "postion": [2,3], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
-                {"name" : "house-2", "img": "/client/src/assets/images/house.png", "postion": [3,2], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
-                {"name" : "house-3", "img": "/client/src/assets/images/house.png", "postion": [3,4], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
-                {"name" : "house-4", "img": "/client/src/assets/images/house.png", "postion": [3,4], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
-                {"name" : "school-1", "img": "/client/src/assets/images/school.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -5, "happiness": 5}},
-                {"name" : "park-1", "img": "/client/src/assets/images/park.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 20, "happiness": 10}},
-                {"name" : "park-2", "img": "/client/src/assets/images/park.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 20, "happiness": 10}},
-                {"name" : "factory-1", "img": "/client/src/assets/images/factory.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -10, "happiness": -5}},
-                {"name" : "factory-2", "img": "/client/src/assets/images/factory.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -10, "happiness": -5}},
-                {"name" : "powerplant-1", "img": "/client/src/assets/images/powerplant.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -10, "happiness": -5}},
-                {"name" : "powerplant-2", "img": "/client/src/assets/images/powerplant.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -10, "happiness": -5}},
-                {"name" : "windmill-1", "img": "/client/src/assets/images/windmill.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -10, "happiness": -5}},
-                {"name" : "windmill-2", "img": "/client/src/assets/images/windmill.png", 	"postion" : [-1,-1], 	"tileColour" :	"green","effect":{"environment":-10,"happiness":-5}}
+                {"name": "house-1", "img": "/client/src/assets/images/house.png", "position": [1, 1], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
+                {"name": "house-2", "img": "/client/src/assets/images/house.png", "position": [4, 4], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
+                {"name": "house-3", "img": "/client/src/assets/images/house.png", "position": [2, 5], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
+                {"name": "house-4", "img": "/client/src/assets/images/house.png", "position": [5, 2], "tileColour": "green", "effect": {"environment": 0, "happiness": 0}},
+                {"name": "school-1", "img": "/client/src/assets/images/school.png", "position": [-1, -1], "tileColour": "blue", "effect": {"environment": -5, "happiness": 15}},
+                {"name": "school-2", "img": "/client/src/assets/images/school.png", "position": [-1, -1], "tileColour": "blue", "effect": {"environment": -5, "happiness": 15}},
+                {"name": "park-1", "img": "/client/src/assets/images/park.png", "position": [-1, -1], "tileColour": "green", "effect": {"environment": 20, "happiness": 10}},
+                {"name": "park-2", "img": "/client/src/assets/images/park.png", "position": [-1, -1], "tileColour": "green", "effect": {"environment": 20, "happiness": 10}},
+                {"name": "factory-1", "img": "/client/src/assets/images/factory.png", "position": [-1, -1], "tileColour": "gray", "effect": {"environment": -15, "happiness": -10}},
+                {"name": "factory-2", "img": "/client/src/assets/images/factory.png", "position": [-1, -1], "tileColour": "gray", "effect": {"environment": -15, "happiness": -10}},
+                {"name": "powerplant-1", "img": "/client/src/assets/images/powerplant.png", "position": [-1, -1], "tileColour": "yellow", "effect": {"environment": -20, "happiness": -5}},
+                {"name": "powerplant-2", "img": "/client/src/assets/images/powerplant.png", "position": [-1, -1], "tileColour": "yellow", "effect": {"environment": -20, "happiness": -5}},
+                {"name": "windmill-1", "img": "/client/src/assets/images/windmill.png", "position": [-1, -1], "tileColour": "white", "effect": {"environment": 15, "happiness": 5}},
+                {"name": "windmill-2", "img": "/client/src/assets/images/windmill.png", "position": [-1, -1], "tileColour": "white", "effect": {"environment": 15, "happiness": 5}},
+                {"name": "windmill-3", "img": "/client/src/assets/images/windmill.png", "position": [-1, -1], "tileColour": "white", "effect": {"environment": 15, "happiness": 5}}
             ],
             "solutions": [
-                {"id" : "school-1", "position": [1,2]},
-                {"id" : "park-1", "position": [2,1]}
+                {"id": "school-1", "position": [2, 2]},
+                {"id": "park-1", "position": [3, 3]},
+                {"id": "factory-1", "position": [5, 5]},
+                {"id": "powerplant-1", "position": [1, 5]},
+                {"id": "windmill-1", "position": [4, 1]},
+                {"id": "windmill-2", "position": [2, 4]}
             ]
         }
-    ]}
+    ]
+}

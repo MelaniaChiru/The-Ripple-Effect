@@ -95,7 +95,7 @@ function Grid({levelInfo}) {
 
     // derive stats from placed tiles and level definitions
     const stats = React.useMemo(() => {
-        let happiness = BASE_STATS.happiness ?? 40;
+    let happiness = BASE_STATS.happiness ?? 40;
         let environment = BASE_STATS.environment ?? 40;
 
         // environment: always applied per placed tile using tile definition effect
