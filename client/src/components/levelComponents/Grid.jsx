@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Tile from './Tile.jsx';
 import Palette from './Palette.jsx';
 import House from '../../assets/images/house.png';
 import Park from '../../assets/images/park.png';
 import School from '../../assets/images/school.png';
+import Factory from '../../assets/images/factory.png';
+import WindTurbine from '../../assets/images/wind-turbine.png';
+import NuclearPowerPlant from '../../assets/images/nuclear-power-plant.png';
+import Recycle from '../../assets/images/recycle.png';
+import Bus from '../../assets/images/bus.png';
 import '../../styles/grid.css';
 import StatsBar from './StatsBar.jsx';
+
+
 
 function Grid({levelInfo}) {
     const GRID_SIZE = 6; // grid is always 6x6 per requirements
@@ -45,6 +52,11 @@ function Grid({levelInfo}) {
             case 'house': return House;
             case 'park': return Park;
             case 'school': return School;
+            case 'factory': return Factory;
+            case 'windmill': return WindTurbine;
+            case 'powerplant': return NuclearPowerPlant;
+            case 'recycle': return Recycle;
+            case 'bus': return Bus;
             default: return House;
         }
     };
@@ -68,12 +80,21 @@ function Grid({levelInfo}) {
     const [tiles, setTiles] = useState(seededTiles);
     const [counts, setCounts] = useState(computeCounts());
 
+    // recompute counts whenever level definition changes (e.g., new tile types)
+    useEffect(() => {
+        const next = computeCounts();
+        // console.debug so devs can see new counts when levels change
+        console.debug("recomputed counts", next);
+        setCounts(next);
+    }, [levelTiles]);
+
     // base stats for the level (fallback to 40 if not provided)
     const BASE_STATS = levelInfo?.baseStats ?? { happiness: 40, environment: 40 };
 
     const [highlightedIds, setHighlightedIds] = useState([]);
     const [highlightCenter, setHighlightCenter] = useState(null);
-    const RADIUS_MAP = { park: 1, school: 2 };
+    const [highlightType, setHighlightType] = useState(null); // 'positive' | 'negative' | null
+    const RADIUS_MAP = { park: 1, school: 2, factory: 1, recycle: 1, bus: 3 };
 
     const getPosFromId = (id) => {
         const idx = Number(id.split('-')[1]) - 1;
@@ -94,6 +115,7 @@ function Grid({levelInfo}) {
     };
 
     // derive stats from placed tiles and level definitions
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     const stats = React.useMemo(() => {
         let happiness = BASE_STATS.happiness ?? 40;
         let environment = BASE_STATS.environment ?? 40;
@@ -107,17 +129,17 @@ function Grid({levelInfo}) {
             }
         }
 
-        // happiness: only from parks/schools and only counts houses in their radius
+        // happiness: from parks, schools, factories, bus, and recycle -- counts houses in their radius
         for (const t of tiles) {
             if (!t.type) continue;
-            if (t.type === 'park' || t.type === 'school') {
+            if (t.type === 'park' || t.type === 'school' || t.type === 'factory' || t.type === 'bus' || t.type === 'recycle') {
                 const def = levelTiles.find((lt) => lt.type === t.type);
                 if (def && def.effect) {
                     const radius = RADIUS_MAP[t.type] ?? 0;
                     const affected = getAffectedHouseIds(t.id, radius);
-                    const perHouse = def.effect.happiness ?? 0;
-                    // add per-house happiness for each affected house
-                    happiness += perHouse * affected.length;
+                    const perHouseHappiness = def.effect.happiness ?? 0;
+                    // add per-house happiness for each affected house (factories negative)
+                    happiness += perHouseHappiness * affected.length;
                 }
             }
         }
@@ -141,6 +163,7 @@ function Grid({levelInfo}) {
     const clearHighlights = () => {
         setHighlightedIds([]);
         setHighlightCenter(null);
+        setHighlightType(null);
     };
 
     const handleDragOver = (e) => {
@@ -153,10 +176,12 @@ function Grid({levelInfo}) {
             if (!data) return;
             const payload = JSON.parse(data);
             const rType = payload.type;
-            if (rType === 'park' || rType === 'school') {
+            if (rType === 'park' || rType === 'school' || rType === 'factory' || rType === 'bus' || rType === 'recycle') {
                 const radius = RADIUS_MAP[rType];
                 const ids = getAffectedHouseIds(tileEl.id, radius);
                 setHighlightedIds(ids);
+                // set visual type (factories show negative highlight)
+                setHighlightType(rType === 'factory' ? 'negative' : 'positive');
             }
         } catch (err) {
             console.error(err);
@@ -172,10 +197,11 @@ function Grid({levelInfo}) {
             if (!data) return;
             const payload = JSON.parse(data);
             const rType = payload.type;
-            if (rType === 'park' || rType === 'school') {
+            if (rType === 'park' || rType === 'school' || rType === 'factory' || rType === 'bus' || rType === 'recycle') {
                 const radius = RADIUS_MAP[rType];
                 const ids = getAffectedHouseIds(tile?.id, radius);
                 setHighlightedIds(ids);
+                setHighlightType(rType === 'factory' ? 'negative' : 'positive');
             }
         } catch (err) {
             console.error(err);
@@ -266,8 +292,8 @@ function Grid({levelInfo}) {
             const tileEl = e.target.parentNode;
             const type = tileEl.getAttribute('data-type');
 
-            // if clicking on park/school on the grid, show effected houses
-            if (type === 'park' || type === 'school') {
+            // if clicking on park/school/factory/bus/recycle on the grid, show effected houses
+            if (type === 'park' || type === 'school' || type === 'factory' || type === 'bus' || type === 'recycle') {
                 const radius = RADIUS_MAP[type];
                 // toggle if same center
                 if (highlightCenter === tileEl.id) {
@@ -277,6 +303,7 @@ function Grid({levelInfo}) {
                 const ids = getAffectedHouseIds(tileEl.id, radius);
                 setHighlightedIds(ids);
                 setHighlightCenter(tileEl.id);
+                setHighlightType(type === 'factory' ? 'negative' : 'positive');
                 return;
             }
 
@@ -294,7 +321,7 @@ function Grid({levelInfo}) {
         <section class='grid-section'>
             <div className="tiles" id='tiles' onDragOver={handleDragOver} onDrop={handleDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onClick={handleClick} >
                 {tiles.map((tile) => (
-                    <Tile key={tile.id} id={tile.id} type={tile.type} imgPath={tile.imgPath} fixed={tile.fixed} highlighted={highlightedIds.includes(tile.id)} />
+                    <Tile key={tile.id} id={tile.id} type={tile.type} imgPath={tile.imgPath} fixed={tile.fixed} highlighted={highlightedIds.includes(tile.id) ? highlightType : false} />
                 ))}
             </div>
             <Palette counts={counts} />

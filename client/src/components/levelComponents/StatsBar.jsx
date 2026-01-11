@@ -2,9 +2,9 @@ import React from 'react';
 import '../../styles/StatsBar.css'
 import Happy from '../../assets/icons/happy.png';
 import Environment from '../../assets/icons/environment.png';
-// import Environment from '../../assets/icons/eco.png';
+import Economy from '../../assets/icons/economy.png';
 
-const StatsBar = ({ happiness, environment }) => {
+const StatsBar = ({ happiness, environment, economy }) => {
   return (
     <div className="stats-container">
       {/* Happiness Stat */}
@@ -41,6 +41,24 @@ const StatsBar = ({ happiness, environment }) => {
           <div 
             className={`progress-fill environment-fill ${environment > 80 ? 'over-optimized' : ''}`} 
             style={{ width: `${environment}%` }}
+          ></div>
+        </div>
+      </div>
+    
+    {/* Economy Stat */}
+    <div className="stat-item">
+      <div className="stat-header">
+        <span className="stat-label"> 
+          <img src={Economy} alt="Economy Icon" />
+          Economy
+        </span>
+          <span className="stat-value">{Math.round(economy)}</span>
+        </div>
+        <div className="progress-track">
+          <div className="win-zone-marker"></div>
+          <div 
+            className={`progress-fill economy-fill ${economy > 80 ? 'over-optimized' : ''}`} 
+            style={{ width: `${economy}%` }}
           ></div>
         </div>
       </div>
