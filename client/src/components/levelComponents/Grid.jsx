@@ -513,7 +513,11 @@ function Grid({ levelInfo, onLevelCompleteChange }) {
                     <StatsBar happiness={stats.happiness} environment={stats.environment} economy={stats.economy} />
                 }
                 {levelComplete && (
-                    <div className="level-complete">✅ Level Complete! Environment, Happiness, Economy ≥ 75</div>
+                    <div className="level-complete">
+                        {levelInfo?.id === 1
+                            ? "✅ Level Complete! Environment, Happiness ≥ 75"
+                            : "✅ Level Complete! Environment, Happiness, Economy ≥ 75"}
+                    </div>
                 )}
             </div>
         </section>
