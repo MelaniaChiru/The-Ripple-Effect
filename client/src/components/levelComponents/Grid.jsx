@@ -285,8 +285,8 @@ function Grid({levelInfo}) {
         const allPlaced = Object.values(counts).every((c) => c === 0);
         // debug values so we can see why completion may not trigger
         console.debug('completion check:', { allPlaced, environment: stats.environment, happiness: stats.happiness, economy: stats.economy, counts });
-        // require Environment and Happiness >= 70 (economy not required for completion)
-        setLevelComplete(allPlaced && stats.environment >= 70 && stats.happiness >= 70);
+        // require Environment and Happiness >= 75 (economy not required for completion)
+        setLevelComplete(allPlaced && stats.environment >= 75 && stats.happiness >= 75 && stats.economy >= 75);
     }, [stats.environment, stats.happiness, stats.economy, counts]);
     // When a level becomes complete, mark it in the `game_progress` cookie (completed mapping only) and also persist saved state to localStorage
     React.useEffect(() => {
