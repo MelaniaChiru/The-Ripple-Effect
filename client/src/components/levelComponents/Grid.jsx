@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import Tile from './Tile.jsx';
 import Palette from './Palette.jsx';
@@ -200,11 +201,11 @@ function Grid({levelInfo}) {
         });
 
         // recompute counts to reflect placements
-        setCounts((prevCounts) => {
+        setCounts((_prevCounts) => {
             const base = computeCounts();
             // adjust counts after setTiles has applied
             setTimeout(() => {
-                setCounts((cur) => {
+                setCounts((_cur) => {
                     const copy = { ...base };
                     // read current tiles state (after update)
                     tiles.forEach((tile) => {
