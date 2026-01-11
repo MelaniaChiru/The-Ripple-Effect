@@ -22,3 +22,23 @@
 .level-component .grid-section{
 	flex: 1;
 }
+
+strong.h{
+	color: #E8B917;
+}
+
+strong.env{
+	color: #07BA32;
+}
+
+strong.econ{
+	color: #539BF7;
+}
+
+strong.econ{
+	color: #539BF7;
+}
+
+strong.underline{
+	text-decoration: underline;
+}
