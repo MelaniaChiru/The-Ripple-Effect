@@ -7,6 +7,10 @@ import WindTurbine from '../../assets/images/wind-turbine.png';
 import NuclearPowerPlant from '../../assets/images/nuclear-power-plant.png';
 import Recycle from '../../assets/images/recycle.png';
 import Bus from '../../assets/images/bus.png';
+import SkyScraper from '../../assets/images/skyscraper.png';
+import Golf from '../../assets/images/golf.png';
+import Jet from '../../assets/images/jet.png';
+import Garden from '../../assets/images/garden.png';
 import '../../styles/grid.css';
 
 const items = [
@@ -18,6 +22,10 @@ const items = [
     { type: 'powerplant', imgPath: NuclearPowerPlant, label: 'Power Plant' },
     { type: 'recycle', imgPath: Recycle, label: 'Recycle' },
     { type: 'bus', imgPath: Bus, label: 'Bus' },
+    { type: 'skyscraper', imgPath: SkyScraper, label: 'Skyscraper' },
+    { type: 'golf', imgPath: Golf, label: 'Golf Course' },
+    { type: 'jet', imgPath: Jet, label: 'Jet' },
+    { type: 'garden', imgPath: Garden, label: 'Garden' },
 ];
 
 function Palette({ counts = {} }) {
