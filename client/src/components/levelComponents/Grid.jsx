@@ -75,35 +75,6 @@ function Grid({levelInfo}) {
     const [highlightCenter, setHighlightCenter] = useState(null);
     const RADIUS_MAP = { park: 1, school: 2 };
 
-    // derive stats from placed tiles and level definitions
-    const stats = React.useMemo(() => {
-        let happiness = BASE_STATS.happiness ?? 40;
-        let environment = BASE_STATS.environment ?? 40;
-
-        for (const t of tiles) {
-            if (!t.type) continue;
-            // find the tile definition from level data to get effect values
-            const def = levelTiles.find((lt) => lt.type === t.type);
-            if (def && def.effect) {
-                environment += def.effect.environment ?? 0;
-                happiness += def.effect.happiness ?? 0;
-            }
-        }
-
-        // clamp to [0,100]
-        environment = Math.max(0, Math.min(100, environment));
-        happiness = Math.max(0, Math.min(100, happiness));
-        return { environment, happiness };
-    }, [tiles, levelTiles, BASE_STATS.happiness, BASE_STATS.environment]);
-
-    const [levelComplete, setLevelComplete] = useState(false);
-
-    React.useEffect(() => {
-        // require that there are no remaining tiles in the palette (all placed)
-        const allPlaced = Object.values(counts).every((c) => c === 0);
-        setLevelComplete(allPlaced && stats.environment >= 70 && stats.happiness >= 70);
-    }, [stats.environment, stats.happiness, counts]);
-
     const getPosFromId = (id) => {
         const idx = Number(id.split('-')[1]) - 1;
         return { r: Math.floor(idx / cols) + 1, c: (idx % cols) + 1 };
@@ -121,6 +92,51 @@ function Grid({levelInfo}) {
         });
         return ids;
     };
+
+    // derive stats from placed tiles and level definitions
+    const stats = React.useMemo(() => {
+        let happiness = BASE_STATS.happiness ?? 40;
+        let environment = BASE_STATS.environment ?? 40;
+
+        // environment: always applied per placed tile using tile definition effect
+        for (const t of tiles) {
+            if (!t.type) continue;
+            const def = levelTiles.find((lt) => lt.type === t.type);
+            if (def && def.effect) {
+                environment += def.effect.environment ?? 0;
+            }
+        }
+
+        // happiness: only from parks/schools and only counts houses in their radius
+        for (const t of tiles) {
+            if (!t.type) continue;
+            if (t.type === 'park' || t.type === 'school') {
+                const def = levelTiles.find((lt) => lt.type === t.type);
+                if (def && def.effect) {
+                    const radius = RADIUS_MAP[t.type] ?? 0;
+                    const affected = getAffectedHouseIds(t.id, radius);
+                    const perHouse = def.effect.happiness ?? 0;
+                    // add per-house happiness for each affected house
+                    happiness += perHouse * affected.length;
+                }
+            }
+        }
+
+        // clamp to [0,100]
+        environment = Math.max(0, Math.min(100, environment));
+        happiness = Math.max(0, Math.min(100, happiness));
+        return { environment, happiness };
+    }, [tiles, levelTiles, BASE_STATS.happiness, BASE_STATS.environment]);
+
+    const [levelComplete, setLevelComplete] = useState(false);
+
+    React.useEffect(() => {
+        // require that there are no remaining tiles in the palette (all placed)
+        const allPlaced = Object.values(counts).every((c) => c === 0);
+        setLevelComplete(allPlaced && stats.environment >= 70 && stats.happiness >= 70);
+    }, [stats.environment, stats.happiness, counts]);
+
+
 
     const clearHighlights = () => {
         setHighlightedIds([]);
