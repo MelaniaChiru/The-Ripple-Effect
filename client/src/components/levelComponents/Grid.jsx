@@ -19,7 +19,7 @@ import StatsBar from './StatsBar.jsx';
 
 
 
-function Grid({levelInfo}) {
+function Grid({ levelInfo, onLevelCompleteChange }) {
     const GRID_SIZE = 6; // grid is always 6x6 per requirements
     const rows = GRID_SIZE;
     const cols = GRID_SIZE;
@@ -261,6 +261,14 @@ function Grid({levelInfo}) {
         // require Environment and Happiness >= 75 (economy not required for completion)
         setLevelComplete(allPlaced && stats.environment >= 75 && stats.happiness >= 75 && stats.economy >= 75);
     }, [stats.environment, stats.happiness, stats.economy, counts]);
+    
+    // tell LevelComponent so it can show the Next Level button
+    useEffect(() => {
+        if (typeof onLevelCompleteChange === 'function') {
+            onLevelCompleteChange(levelComplete);
+        }
+    }, [levelComplete, onLevelCompleteChange]);
+    
     // When a level becomes complete, mark it in the `game_progress` cookie (completed mapping only) and also persist saved state to localStorage
     React.useEffect(() => {
         if (!levelComplete) return;
