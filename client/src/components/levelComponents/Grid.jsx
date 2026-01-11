@@ -338,7 +338,7 @@ function Grid({levelInfo}) {
             <div className="stats-container">
                 <StatsBar happiness={stats.happiness} environment={stats.environment} economy={stats.economy} />
                 {levelComplete && (
-                    <div className="level-complete">✅ Level Complete! Both Environment and Happiness ≥ 75</div>
+                    <div className="level-complete">✅ Level Complete! Environment, Happiness, Economy ≥ 75</div>
                 )}
             </div>
         </section>
