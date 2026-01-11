@@ -75,6 +75,31 @@ function LevelSelection({ setCurrentPage }) {
                     ))}
                 </div>
             </div>
+
+            <div className="level-selection__pop-up">
+                <h1>Welcome to A Better World</h1>
+                <h2>Success isn't measured by how much we build, but by how well we live together.</h2>
+                <p>
+                    In The Ripple Effect, you are the architect of harmony. Every choice you make sends waves through the community.
+                </p>
+
+                <h3>How to Play</h3>
+                <ul>
+                    <li>
+                        Place Tiles: Drag elements from your palette onto the grid to change the world.
+                    </li>
+                    <li>
+                        Watch the Ripples: Pay close attention to where you place your tiles. Positive connections create growth; negative ones cause friction.
+                        </li>
+                    <li>
+                        Find the Harmony: Your goal isn't to maximize one stat, but to find balance.
+                    </li>
+
+                    <li>
+                        Your Mission: Bring the stats into the Golden Zone (75–100). If one gets too low, the harmony is broken.
+                    </li>
+                </ul>
+            </div>
         </div>
     );
 }
