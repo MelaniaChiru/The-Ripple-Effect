@@ -512,12 +512,23 @@ function Grid({levelInfo, setCurrentPage}) {
                     <div className="level-complete-card">
                         <h1>Level Complete!</h1>
                         <p>You've successfully balanced the needs of the community and the planet.</p>
-                        <button 
-                            className="next-level-btn"
-                            onClick={() => { setCurrentPage(`level-${levelInfo.id + 1}`) }}
-                        >
-                            Next Level
-                        </button>
+                        {levelInfo.id <= 4 && (
+                            <button 
+                                className="next-level-btn"
+                                onClick={() => { setCurrentPage(`level-${levelInfo.id + 1}`) }}
+                            >
+                                Next Level
+                            </button>
+                        )}
+
+                        {levelInfo.id == 5 && (
+                            <button 
+                                className="next-level-btn"
+                                onClick={() => { setCurrentPage("level-selection") }}
+                            >
+                                Back to all levels
+                            </button>
+                        )}
                     </div>
                 </div>
             )}
