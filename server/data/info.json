@@ -39,6 +39,7 @@
         },
         {
             "levelNumber": 3,
+            "baseStats": { "happiness": 20, "environment": 40, "economy": 40 },
             "gridSize": [6, 6],
             "tiles": [
               {"name":"house-1","img":"/client/src/assets/images/house.png","postion":[2,3],"tileColour":"green","effect":{"environment":0,"happiness":0,"economy":0}},

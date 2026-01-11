@@ -45,6 +45,7 @@ router.get("/levels/:levelId", async (req, res) => {
     res.json({
       id: level.levelNumber ?? levelId,
       gridSize: level.gridSize,
+      baseStats: level.baseStats,
       tiles: normalizeTiles(level.tiles),
       solutions: normalizeSolutions(level.solutions)
     });
