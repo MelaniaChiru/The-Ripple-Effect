@@ -4,7 +4,7 @@ import Happy from '../../assets/icons/happy.png';
 import Environment from '../../assets/icons/environment.png';
 import Economy from '../../assets/icons/economy.png';
 
-const StatsBar = ({ happiness, environment }) => {
+const StatsBar = ({ happiness, environment, economy }) => {
   return (
     <div className="stats-container">
       {/* Happiness Stat */}
@@ -44,8 +44,7 @@ const StatsBar = ({ happiness, environment }) => {
           ></div>
         </div>
       </div>
-    </div>
-
+    
     {/* Economy Stat */}
     <div className="stat-item">
       <div className="stat-header">
