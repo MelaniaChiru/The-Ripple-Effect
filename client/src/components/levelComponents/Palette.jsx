@@ -27,20 +27,37 @@ function Palette({ counts = {} }) {
         e.dataTransfer.effectAllowed = 'copy';
     };
 
+    // 1. Get a list of tile types that are actually used in this level
+    // This includes types that are currently 0 but WERE in the counts object initially
+    const activeLevelTypes = Object.keys(counts);
+
     return (
         <aside className="palette" id="palette">
-            <h3>Palette</h3>
+            <h3>Drag & Drop the tiles</h3>
             <div className="palette-items">
-                {items.map((it) => {
-                    const available = counts[it.type] ?? 0;
-                    const disabled = available <= 0;
-                    return (
-                        <div key={it.type} className={`palette-item ${disabled ? 'disabled' : ''}`} draggable={!disabled} onDragStart={(e) => !disabled && handleDragStart(e, it)}>
-                            <img src={it.imgPath} alt={it.type} width={40} />
-                            <div className="palette-label">{it.label ?? it.type} <span className="palette-count">{available}</span></div>
-                        </div>
-                    );
-                })}
+                {items
+                    // 2. Filter the items list to only show types present in 'counts'
+                    .filter((it) => activeLevelTypes.includes(it.type))
+                    .map((it) => {
+                        const available = counts[it.type] ?? 0;
+                        const disabled = available <= 0;
+                        
+                        return (
+                            <div 
+                                key={it.type} 
+                                className={`palette-item ${disabled ? 'disabled' : ''}`} 
+                                draggable={!disabled} 
+                                onDragStart={(e) => !disabled && handleDragStart(e, it)}
+                            >
+                                <img src={it.imgPath} alt={it.type} width={40} />
+                                <div className="palette-label">
+                                    {it.label ?? it.type} 
+                                    <span className="palette-count">({available})</span>
+                                </div>
+                            </div>
+                        );
+                    })
+                }
             </div>
         </aside>
     );

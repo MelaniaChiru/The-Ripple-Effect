@@ -4,7 +4,7 @@ import Happy from '../../assets/icons/happy.png';
 import Environment from '../../assets/icons/environment.png';
 import Economy from '../../assets/icons/eco.png';
 
-const StatsBar = ({ happiness, environment, economy }) => {
+const StatsBar = ({ happiness=-1, environment=-1, economy=-1 }) => {
   return (
     <div className="stats-container">
       {/* Happiness Stat */}
@@ -46,22 +46,24 @@ const StatsBar = ({ happiness, environment, economy }) => {
       </div>
     
     {/* Economy Stat */}
-    <div className="stat-item">
-      <div className="stat-header">
-        <span className="stat-label"> 
-          <img src={Economy} alt="Economy Icon" />
-          Economy
-        </span>
-          <span className="stat-value">{Math.round(economy)}</span>
-        </div>
-        <div className="progress-track">
-          <div className="win-zone-marker"></div>
-          <div 
-            className={`progress-fill economy-fill ${economy > 80 ? 'over-optimized' : ''}`} 
-            style={{ width: `${economy}%` }}
-          ></div>
-        </div>
+    {economy >= 0 && (
+      <div className="stat-item">
+        <div className="stat-header">
+          <span className="stat-label"> 
+            <img src={Economy} alt="Economy Icon" />
+            Economy
+          </span>
+            <span className="stat-value">{Math.round(economy)}</span>
+          </div>
+          <div className="progress-track">
+            <div className="win-zone-marker"></div>
+            <div 
+              className={`progress-fill economy-fill ${economy > 80 ? 'over-optimized' : ''}`} 
+              style={{ width: `${economy}%` }}
+            ></div>
+          </div>
       </div>
+    )}
     </div>
   );
 };
