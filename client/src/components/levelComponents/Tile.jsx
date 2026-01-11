@@ -1,4 +1,4 @@
-function Tile ({id, type, imgPath, fixed = false, highlighted = false}) {
+function Tile ({id, type, imgPath, fixed = false, highlighted = null}) {
     const handleDragStart = (e) => {
         // Don't allow dragging fixed tiles or empty tiles
         if (!imgPath || fixed) {
@@ -10,7 +10,10 @@ function Tile ({id, type, imgPath, fixed = false, highlighted = false}) {
         e.dataTransfer.effectAllowed = 'move';
     };
 
-    const className = `tile ${fixed ? 'fixed' : ''} ${highlighted ? 'radius-highlight' : ''}`;
+    const highlightClass = highlighted === 'negative' ? 'radius-highlight negative' : (highlighted === 'positive' ? 'radius-highlight positive' : '');
+    const overlayClass = highlighted === 'negative' ? 'radius-overlay negative' : 'radius-overlay';
+
+    const className = `tile ${fixed ? 'fixed' : ''} ${highlightClass}`;
 
     return (
         <div className={className} id={id} data-type={type ?? ''}>
@@ -19,7 +22,7 @@ function Tile ({id, type, imgPath, fixed = false, highlighted = false}) {
             ) : (
                 <div className="empty-placeholder" />
             )}
-            {highlighted && <div className="radius-overlay" aria-hidden />}
+            {highlighted && <div className={overlayClass} aria-hidden />}
         </div>
     );
 }

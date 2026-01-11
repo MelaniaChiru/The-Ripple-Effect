@@ -27,7 +27,10 @@
                 {"name" : "park-1", "img": "/client/src/assets/images/park.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 20, "happiness": 10}},
                 {"name" : "park-2", "img": "/client/src/assets/images/park.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 20, "happiness": 10}},
                 {"name" : "factory-1", "img": "/client/src/assets/images/factory.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -10, "happiness": -5}},
-                {"name" : "factory-2", "img": "/client/src/assets/images/factory.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -10, "happiness": -5}}
+                {"name" : "factory-2", "img": "/client/src/assets/images/factory.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": -10, "happiness": -5}},
+                {"name" : "recycle-1", "img": "/client/src/assets/images/recycle.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 5, "happiness": 1}},
+                {"name" : "bus-1", "img": "/client/src/assets/images/bus.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 10, "happiness": 5}}
+
             ],
             "solutions": [
                 {"id" : "school-1", "position": [1,2]},
