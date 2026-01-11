@@ -128,6 +128,37 @@ function LevelComponent({ level, setCurrentPage }) {
 					</div>
 				</div>
 			)}
+
+			{level == "5" && showInfo &&(
+				<div className="modal-overlay">
+					<div className="level-selection__pop-up">
+						<h1>Level 5: Maximum Synergy</h1>
+						<h2>The Finance Bros have arrived; It’s time to maximize shareholder value while pretending we care about the trees.</h2>
+
+						<div className="pop-up__content">
+							New Tiles
+							<ul>
+								<li>
+									🏙️ Skyscrapers: They generate <strong className="econ">massive Economy</strong>, but their massive shadows cause a Happiness drop for any house in a <strong className="h">3 tile vicinity</strong>.
+								</li>
+								<li>
+									⛳ Golf Course: They <strong className="env">drain the reservoir </strong>but make every single homeowner on the grid <strong className="h">feel great</strong>, especially the finance bros.
+								</li>
+								<li>
+									🛩️ Private Jet: It <strong className="econ">pumps the Economy</strong> to the moon! Just don't place it near houses; the sound causes a huge <strong className="h">Happiness drop</strong> in a <strong className="h">3 tile</strong> radius.
+								</li>
+
+								<li>
+									🌱 Rooftop Garden: It’s the our way to <strong className="env">patch the Environment</strong>.
+								</li>
+							</ul>
+						</div>
+						<button className="pop-up__close-btn" onClick={closeInfo}>
+						Let's Begin
+						</button>
+					</div>
+				</div>
+			)}
 		</div>
 
 	);
