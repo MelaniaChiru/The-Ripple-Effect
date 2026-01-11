@@ -10,6 +10,10 @@ import WindTurbine from '../../assets/images/wind-turbine.png';
 import NuclearPowerPlant from '../../assets/images/nuclear-power-plant.png';
 import Recycle from '../../assets/images/recycle.png';
 import Bus from '../../assets/images/bus.png';
+import Skyscraper from '../../assets/images/skyscraper.png';
+import Golf from '../../assets/images/golf.png';
+import Garden from '../../assets/images/garden.png';
+import Jet from '../../assets/images/jet.png';
 import '../../styles/grid.css';
 import StatsBar from './StatsBar.jsx';
 
@@ -58,6 +62,10 @@ function Grid({levelInfo}) {
             case 'powerplant': return NuclearPowerPlant;
             case 'recycle': return Recycle;
             case 'bus': return Bus;
+            case 'skyscraper': return Skyscraper;
+            case 'golf': return Golf;
+            case 'garden': return Garden;
+            case 'jet': return Jet;
             default: return House;
         }
     };
@@ -96,7 +104,7 @@ function Grid({levelInfo}) {
     const [highlightedIds, setHighlightedIds] = useState([]);
     const [highlightCenter, setHighlightCenter] = useState(null);
     const [highlightType, setHighlightType] = useState(null); // 'positive' | 'negative' | null
-    const RADIUS_MAP = { park: 1, school: 2, factory: 1, recycle: 1, bus: 3,  powerplant: 2, windmill: 1};
+    const RADIUS_MAP = { park: 1, school: 2, factory: 1, recycle: 1, bus: 3, powerplant: 2, windmill: 1, garden: 1, skyscraper: 3, jet: 3, golf: 0 };
 
     const getPosFromId = (id) => {
         const idx = Number(id.split('-')[1]) - 1;
@@ -239,18 +247,20 @@ function Grid({levelInfo}) {
             }
         }
 
-        // happiness: from parks, schools, factories, bus, and recycle -- counts houses in their radius
+        // happiness: parks/schools/factories/bus/recycle/garden/skyscraper/jet affect houses in radius; golf adds a global happiness bonus
         for (const t of tiles) {
             if (!t.type) continue;
-            if (t.type === 'park' || t.type === 'school' || t.type === 'factory' || t.type === 'bus' || t.type === 'recycle' || t.type === 'powerplant' || t.type === 'windmill') {
-                const def = levelTiles.find((lt) => lt.type === t.type);
-                if (def && def.effect) {
-                    const radius = RADIUS_MAP[t.type] ?? 0;
-                    const affected = getAffectedHouseIds(t.id, radius);
-                    const perHouseHappiness = def.effect.happiness ?? 0;
-                    // add per-house happiness for each affected house (factories negative)
-                    happiness += perHouseHappiness * affected.length;
-                }
+            const def = levelTiles.find((lt) => lt.type === t.type);
+            if (!def || !def.effect) continue;
+
+            if (t.type === 'golf') {
+                // golf: global happiness bonus regardless of position
+                happiness += def.effect.happiness ?? 0;
+            } else if (['park', 'school', 'factory', 'bus', 'recycle', 'powerplant', 'windmill', 'garden', 'skyscraper', 'jet'].includes(t.type)) {
+                const radius = RADIUS_MAP[t.type] ?? 0;
+                const affected = getAffectedHouseIds(t.id, radius);
+                const perHouseHappiness = def.effect.happiness ?? 0;
+                happiness += perHouseHappiness * affected.length;
             }
         }
         for (const t of tiles) {
@@ -357,12 +367,12 @@ function Grid({levelInfo}) {
             if (!data) return;
             const payload = JSON.parse(data);
             const rType = payload.type;
-            if (rType === 'park' || rType === 'school' || rType === 'factory' || rType === 'bus' || rType === 'recycle' || rType === 'powerplant' || rType === 'windmill') {
+            if (['park', 'school', 'factory', 'bus', 'recycle', 'powerplant', 'windmill', 'garden', 'skyscraper', 'jet'].includes(rType)) {
                 const radius = RADIUS_MAP[rType];
                 const ids = getAffectedHouseIds(tileEl.id, radius);
                 setHighlightedIds(ids);
-                // set visual type (factories show negative highlight)
-                setHighlightType((rType === 'factory' || rType === 'powerplant') ? 'negative' : 'positive');
+                // negative impact types
+                setHighlightType((['factory', 'powerplant', 'skyscraper', 'jet'].includes(rType)) ? 'negative' : 'positive');
             }
         } catch (err) {
             console.error(err);
@@ -378,11 +388,11 @@ function Grid({levelInfo}) {
             if (!data) return;
             const payload = JSON.parse(data);
             const rType = payload.type;
-            if (rType === 'park' || rType === 'school' || rType === 'factory' || rType === 'bus' || rType === 'recycle') {
+            if (['park', 'school', 'factory', 'bus', 'recycle', 'powerplant', 'windmill', 'garden', 'skyscraper', 'jet'].includes(rType)) {
                 const radius = RADIUS_MAP[rType];
                 const ids = getAffectedHouseIds(tile?.id, radius);
                 setHighlightedIds(ids);
-                setHighlightType((rType === 'factory' || rType === 'powerplant') ? 'negative' : 'positive');
+                setHighlightType((['factory', 'powerplant', 'skyscraper', 'jet'].includes(rType)) ? 'negative' : 'positive');
             }
         } catch (err) {
             console.error(err);

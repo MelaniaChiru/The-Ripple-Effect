@@ -125,8 +125,12 @@
                 {"name" : "park-1", "img": "/client/src/assets/images/park.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 20, "happiness": 10, "economy" : 0}},
                 {"name" : "park-2", "img": "/client/src/assets/images/park.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 20, "happiness": 10, "economy" : 0}},
                 {"name" : "recycle-1", "img": "/client/src/assets/images/recycle.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 10, "happiness": 3, "economy": 0}},
-                {"name" : "bus-1", "img": "/client/src/assets/images/bus.png", "postion": [-1, -1], "tileColour": "green", "effect": {"environment":10, "happiness": 5, "economy":10}}
-
+                {"name" : "garden-1", "img": "/client/src/assets/images/garden.png", "postion": [-1, -1], "tileColour": "green", "effect": {"environment":10, "happiness": 5, "economy":0}},
+                {"name" : "jet-1", "img": "/client/src/assets/images/jet.png", "postion": [-1, -1], "tileColour": "green", "effect": {"environment":-15, "happiness": -5, "economy":10}},
+                {"name" : "skyscraper-1", "img": "/client/src/assets/images/skyscraper.png", "postion": [-1, -1], "tileColour": "green", "effect": {"environment":-5, "happiness": -5, "economy":15}},
+                {"name" : "skyscraper-2", "img": "/client/src/assets/images/skyscraper.png", "postion": [-1, -1], "tileColour": "green", "effect": {"environment":-5, "happiness": -5, "economy":15}},
+                {"name" : "golf-1", "img": "/client/src/assets/images/golf.png", "postion": [-1, -1], "tileColour": "green", "effect": {"environment":-5, "happiness": 15, "economy":15}},
+                {"name" : "bus-1", "img": "/client/src/assets/images/bus.png", "postion": [-1,-1], "tileColour": "green", "effect": {"environment": 10, "happiness": 5, "economy": 10}}
             ],
             "solutions": [
                 {"id" : "school-1", "position": [1,2]},
