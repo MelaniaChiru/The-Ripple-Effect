@@ -12,3 +12,36 @@
 
   background-image: linear-gradient(#D3EEF8, #BEE1F1);
 }
+
+  .small-screen-blocker{
+   display: none;
+  }
+
+@media (max-width: 900px){
+  .small-screen-blocker{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 100;
+    background-image: linear-gradient(#D3EEF8, #BEE1F1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 5vh;
+  }
+  
+  .small-screen-blocker h1{
+    max-width: 60vw;
+  }
+  
+  .small-screen-blocker p{
+    width: 80vw;
+    text-align: justify;
+    max-width: 500px;
+  }
+
+}
