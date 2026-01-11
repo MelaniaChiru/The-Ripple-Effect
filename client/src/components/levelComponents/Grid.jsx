@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Tile from './Tile.jsx';
 import Palette from './Palette.jsx';
 import House from '../../assets/images/house.png';
@@ -88,6 +88,8 @@ function Grid({levelInfo}) {
 
     const [tiles, setTiles] = useState(seededTiles);
     const [counts, setCounts] = useState(computeCounts());
+    // track whether we've just loaded the level so that the initial autosave doesn't overwrite persisted placements
+    const initialLoadRef = useRef(false);
 
     // recompute counts whenever level definition changes (e.g., new tile types)
     useEffect(() => {
@@ -185,50 +187,21 @@ function Grid({levelInfo}) {
         }
     };
 
-    // Try to restore saved placements for this level (if any) from localStorage
+    // On navigation to a level page: clear any non-fixed tiles so the grid starts empty
     React.useEffect(() => {
         if (!levelInfo) return;
         const levelId = levelInfo?.id ?? levelInfo?.levelNumber;
         if (!levelId) return;
 
-        const savedAll = readSavedFromStorage();
-        const saved = savedAll?.[String(levelId)];
-        if (!saved || !saved.placements) return; // nothing saved
+        // clear any non-fixed tiles so the grid appears empty on page navigation
+        setTiles((prev) => prev.map((t) => (t.fixed ? t : { ...t, type: null, imgPath: null })));
 
-        // Apply saved placements
-        setTiles((prev) => {
-            const next = prev.map((t) => {
-                // don't overwrite fixed tiles
-                if (t.fixed) return t;
-                const savedType = saved.placements[t.id];
-                if (!savedType) return { ...t, type: null, imgPath: null };
-                return { ...t, type: savedType, imgPath: getImageForType(savedType) };
-            });
+        // recompute counts for the fresh grid
+        const base = computeCounts();
+        setCounts(base);
 
-            return next;
-        });
-
-        // recompute counts to reflect placements
-        setCounts((_prevCounts) => {
-            const base = computeCounts();
-            // adjust counts after setTiles has applied
-            setTimeout(() => {
-                setCounts((_cur) => {
-                    const copy = { ...base };
-                    // read current tiles state (after update)
-                    tiles.forEach((tile) => {
-                        if (!tile) return;
-                        if (tile.fixed) return; // fixed already accounted for
-                        if (!tile.type) return;
-                        copy[tile.type] = Math.max(0, (copy[tile.type] || 0) - 1);
-                    });
-                    setCounts(copy);
-                });
-            }, 0);
-
-            return base; // initial optimistic value until timeout adjustment
-        });
-
+        // mark that we've just initialized and should skip the immediate autosave (to avoid overwriting saved placements)
+        initialLoadRef.current = true;
     }, [levelInfo]);
 
     // derive stats from placed tiles and level definitions
@@ -337,6 +310,13 @@ function Grid({levelInfo}) {
         if (!levelInfo) return;
         const levelId = levelInfo?.id ?? levelInfo?.levelNumber ?? null;
         if (!levelId) return;
+
+        // If we just loaded the level (navigation), skip the first autosave so that we don't overwrite any persisted placements
+        if (initialLoadRef.current) {
+            initialLoadRef.current = false;
+            console.debug('Skipped initial autosave after level load for', levelId);
+            return;
+        }
 
         const savedAll = readSavedFromStorage();
         savedAll[String(levelId)] = savedAll[String(levelId)] || {};
