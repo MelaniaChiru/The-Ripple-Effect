@@ -507,7 +507,13 @@ function Grid({levelInfo}) {
             </div>
             <Palette counts={counts} />
             <div className="stats-container">
-                <StatsBar happiness={stats.happiness} environment={stats.environment} economy={stats.economy} />
+                {levelInfo.id == 1 && 
+                    <StatsBar happiness={stats.happiness} environment={stats.environment} />
+                }
+
+                {levelInfo.id > 1 && 
+                    <StatsBar happiness={stats.happiness} environment={stats.environment} economy={stats.economy} />
+                }
                 {levelComplete && (
                     <div className="level-complete">✅ Level Complete! Environment, Happiness, Economy ≥ 75</div>
                 )}
