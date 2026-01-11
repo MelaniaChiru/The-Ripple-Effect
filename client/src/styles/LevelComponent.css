@@ -22,3 +22,7 @@
 .level-component .grid-section{
 	flex: 1;
 }
+
+strong{
+	color: #539BF7;
+}
