@@ -30,7 +30,10 @@ function LevelComponent({ level, setCurrentPage }) {
 	function goToNextLevel() {
 		const next = Number(level) + 1;
 		setCurrentPage(`level-${next}`);
-	  }
+	}
+
+	const MAX_LEVEL = 5;
+	const hasNextLevel = Number(level) < MAX_LEVEL;
 
 	return (
 		<div className="level-component">
@@ -41,7 +44,7 @@ function LevelComponent({ level, setCurrentPage }) {
 			{levelInfo && (<Grid levelInfo={levelInfo} onLevelCompleteChange={setLevelCompleted}/>)}
 
 			{/* nxt level button */}
-			{levelCompleted && (
+			{levelCompleted && hasNextLevel && (
 				<button className="next-level-btn" onClick={goToNextLevel}>
 					<img src={nextLevelIcon} alt="Next Level" />
 				</button>
