@@ -2,7 +2,7 @@ import React from 'react';
 import '../../styles/StatsBar.css'
 import Happy from '../../assets/icons/happy.png';
 import Environment from '../../assets/icons/environment.png';
-import Economy from '../../assets/icons/economy.png';
+import Economy from '../../assets/icons/environment.png';
 
 const StatsBar = ({ happiness, environment, economy }) => {
   return (
