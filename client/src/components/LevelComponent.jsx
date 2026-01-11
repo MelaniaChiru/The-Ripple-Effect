@@ -77,6 +77,30 @@ function LevelComponent({ level, setCurrentPage }) {
 					</div>
 				</div>
 			)}
+
+			{level == "3" && showInfo &&(
+				<div className="modal-overlay">
+					<div className="level-selection__pop-up">
+						<h1>Level 3: The Power Dilema</h1>
+						<h2>A thriving world requires immense power. How you generate that energy will define the legacy of your community.</h2>
+
+						<div className="pop-up__content">
+							New Tiles:
+							<ul>
+								<li>
+									☢️ Power Plant: A powerhouse for the <strong className="econ">Economy</strong>, but it is the heaviest burden on the <strong className="env">Environment</strong>. Its shadow is long—residents within <strong>2 tiles</strong> will suffer a major <strong className="h">loss in Happiness</strong>.
+								</li>
+								<li>
+									💨 Wind Turbine: The future of energy. It <strong className="env">heals the Environment</strong> and <strong className="econ">aids the Economy</strong>. While it generates less wealth than a plant, it produces <strong className="h">no negative</strong> ripples for your residents.
+								</li>
+							</ul>
+						</div>
+						<button className="pop-up__close-btn" onClick={closeInfo}>
+						Let's Begin
+						</button>
+					</div>
+				</div>
+			)}
 		</div>
 
 	);

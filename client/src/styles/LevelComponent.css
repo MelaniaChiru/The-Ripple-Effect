@@ -23,6 +23,14 @@
 	flex: 1;
 }
 
-strong{
+strong.h{
+	color: #E8B917;
+}
+
+strong.env{
+	color: #07BA32;
+}
+
+strong.econ{
 	color: #539BF7;
 }
