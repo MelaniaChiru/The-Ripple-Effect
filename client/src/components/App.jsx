@@ -16,6 +16,7 @@ function App() {
       {currentPage == "level-2" && <LevelComponent level="2" setCurrentPage={setCurrentPage}/>}
       {currentPage == "level-3" && <LevelComponent level="3" setCurrentPage={setCurrentPage}/>}
       {currentPage == "level-4" && <LevelComponent level="4" setCurrentPage={setCurrentPage}/>}
+      {currentPage == "level-5" && <LevelComponent level="5" setCurrentPage={setCurrentPage}/>}
 
       <div className="small-screen-blocker">
         <h1>To Create A Better World You Need A Bigger Canvas</h1>
