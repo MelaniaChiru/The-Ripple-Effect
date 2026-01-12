@@ -219,52 +219,53 @@ function Grid({levelInfo, setCurrentPage}) {
         initialLoadRef.current = true;
     }, [levelInfo]);
 
-    // derive stats from placed tiles and level definitions
-    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     const stats = React.useMemo(() => {
-        let happiness = BASE_STATS.happiness ?? 10;
-        let environment = BASE_STATS.environment ?? 40;
-        let economy = BASE_STATS.economy ?? 40;
+    // 1. Start with base stats from JSON (with fallbacks)
+    let happiness = levelInfo?.baseStats?.happiness ?? 10;
+    let environment = levelInfo?.baseStats?.environment ?? 40;
+    let economy = levelInfo?.baseStats?.economy ?? 40;
 
-        // environment: always applied per placed tile using tile definition effect
-        for (const t of tiles) {
-            if (!t.type) continue;
-            const def = levelTiles.find((lt) => lt.type === t.type);
-            if (def && def.effect) {
-                environment += def.effect.environment ?? 0;
-            }
+    // Helper to match tile types to JSON definitions
+    const getDefinition = (tileType) => {
+        return levelTiles.find(lt => {
+            const jsonType = lt.name.split('-')[0];
+            return jsonType === tileType;
+        });
+    };
+
+    // 2. Add effects for Environment and Economy (per tile)
+    for (const t of tiles) {
+        if (!t.type) continue;
+        const def = getDefinition(t.type);
+        if (def && def.effect) {
+            environment += def.effect.environment ?? 0;
+            economy += def.effect.economy ?? 0;
         }
+    }
 
-        // happiness: parks/schools/factories/bus/recycle/garden/skyscraper/jet affect houses in radius; golf adds a global happiness bonus
-        for (const t of tiles) {
-            if (!t.type) continue;
-            const def = levelTiles.find((lt) => lt.name.split('-')[0] === t.type);
-            if (!def || !def.effect) continue;
+    // 3. Add Happiness (Radius/Ripple logic)
+    for (const t of tiles) {
+        if (!t.type) continue;
+        const def = getDefinition(t.type);
+        if (!def || !def.effect) continue;
 
-            if (t.type === 'golf') {
-                // golf: global happiness bonus regardless of position
-                happiness += def.effect.happiness ?? 0;
-            } else if (['park', 'school', 'factory', 'bus', 'recycle', 'powerplant', 'garden', 'skyscraper', 'jet'].includes(t.type)) {
-                const radius = RADIUS_MAP[t.type] ?? 0;
-                const affected = getAffectedHouseIds(t.id, radius);
-                const perHouseHappiness = def.effect.happiness ?? 0;
-                happiness += perHouseHappiness * affected.length;
-            }
+        if (t.type === 'golf') {
+            happiness += def.effect.happiness ?? 0;
+        } else if (RADIUS_MAP[t.type] !== undefined) {
+            const radius = RADIUS_MAP[t.type];
+            const affectedHouses = getAffectedHouseIds(t.id, radius);
+            const perHouseHappiness = def.effect.happiness ?? 0;
+            happiness += perHouseHappiness * affectedHouses.length;
         }
-        for (const t of tiles) {
-            if (!t.type) continue;
-            const def = levelTiles.find((lt) => lt.type === t.type);
-            if (def && def.effect) {
-                economy += def.effect.economy ?? 0;
-            }
-        }
+    }
 
-        // clamp to [0,100]
-        environment = Math.max(0, Math.min(100, environment));
-        happiness = Math.max(0, Math.min(100, happiness));
-        economy = Math.max(0, Math.min(100, economy));
-        return { environment, happiness, economy };
-    }, [tiles, levelTiles, BASE_STATS.happiness, BASE_STATS.environment, BASE_STATS.economy]);
+    // 4. Clamp results between 0 and 100
+    return {
+        environment: Math.max(0, Math.min(100, environment)),
+        happiness: Math.max(0, Math.min(100, happiness)),
+        economy: Math.max(0, Math.min(100, economy))
+    };
+}, [tiles, levelTiles, levelInfo]);
 
     const [levelComplete, setLevelComplete] = useState(false);
 
@@ -514,11 +515,11 @@ function Grid({levelInfo, setCurrentPage}) {
                 </div>
                 <Palette counts={counts} />
                 <div className="stats-container">
-                    {levelInfo.id == 1 && 
+                    {levelInfo.levelNumber == 1 && 
                         <StatsBar happiness={stats.happiness} environment={stats.environment} />
                     }
 
-                    {levelInfo.id > 1 && 
+                    {levelInfo.levelNumber > 1 && 
                         <StatsBar happiness={stats.happiness} environment={stats.environment} economy={stats.economy} />
                     }
                 </div>
@@ -528,16 +529,16 @@ function Grid({levelInfo, setCurrentPage}) {
                     <div className="level-complete-card">
                         <h1>Level Complete!</h1>
                         <p>You've successfully balanced the needs of the community and the planet.</p>
-                        {levelInfo.id <= 4 && (
+                        {levelInfo.levelNumber <= 4 && (
                             <button 
                                 className="next-level-btn"
-                                onClick={() => { setCurrentPage(`level-${levelInfo.id + 1}`) }}
+                                onClick={() => { setCurrentPage(`level-${levelInfo.levelNumber + 1}`) }}
                             >
                                 Next Level
                             </button>
                         )}
 
-                        {levelInfo.id == 5 && (
+                        {levelInfo.levelNumber == 5 && (
                             <button 
                                 className="next-level-btn"
                                 onClick={() => { setCurrentPage("level-selection") }}
