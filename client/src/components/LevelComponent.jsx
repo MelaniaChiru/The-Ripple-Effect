@@ -136,7 +136,7 @@ function LevelComponent({ level, setCurrentPage }) {
 									🏙️ Skyscrapers: They generate <strong className="econ">massive Economy</strong>, but their massive shadows cause a Happiness drop for any house in a <strong className="h">3 tile vicinity</strong>.
 								</li>
 								<li>
-									⛳ Golf Course: They <strong className="env">drain the reservoir </strong>but make every single homeowner on the grid <strong className="h">feel great</strong>, especially the finance bros.
+									⛳ Golf Course: They <strong className="env">drain the reservoir </strong>but make every single homeowner on the grid <strong className="h">feel great</strong>.
 								</li>
 								<li>
 									🛩️ Private Jet: It <strong className="econ">pumps the Economy</strong> to the moon! Just don't place it near houses; the sound causes a huge <strong className="h">Happiness drop</strong> in a <strong className="h">3 tile</strong> radius.
