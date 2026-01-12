@@ -1,7 +1,7 @@
 import Grid from "./levelComponents/Grid";
 import '../styles/LevelComponent.css'
 import { useState } from "react";
-import levelsData from "../../../server/data/info.json";
+import levelsData from "../../info.json";
 
 function LevelComponent({ level, setCurrentPage }) {
     const [showInfo, setShowInfo] = useState(true);
