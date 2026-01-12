@@ -51,8 +51,8 @@ function parseLevels(jsonData) {
                 tile.name,
                 name[0],
                 tile.img,
-                tile.postion[0],
-                tile.postion[1],
+                tile.position[0],
+                tile.position[1],
                 tile.tileColour,
                 tile.effect
             );

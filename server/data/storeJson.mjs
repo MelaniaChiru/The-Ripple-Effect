@@ -11,11 +11,11 @@ export async function readInfoJson() {
 }
 
 // normalizes the tile shape for frontend
-//json use postion
+//json use position
 export function normalizeTiles(tiles = []) {
   return tiles.map((tile) => {
     const [type] = String(tile.name).split("-");
-    const pos = tile.postion || [-1, -1];
+    const pos = tile.position || [-1, -1];
 
     return {
       id: tile.name,
