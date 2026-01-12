@@ -1,27 +1,21 @@
 import Grid from "./levelComponents/Grid";
 import '../styles/LevelComponent.css'
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import levelsData from "../../../server/data/info.json";
 
 function LevelComponent({ level, setCurrentPage }) {
-	const [levelInfo, setLevelInfo] = useState(null);
     const [showInfo, setShowInfo] = useState(true);
 
-	useEffect(() => {
-		async function fetchLevel() {
-			try {
-				const response = await fetch(`/api/levels/${level}`);
-				const data = await response.json();
-				setLevelInfo(data);
-			} catch (error) {
-				console.error("Error fetching level data:", error);
-			}
-		}
-		fetchLevel();
-	}, [level]);
+	const levelInfo = levelsData.levels.find(l => String(l.levelNumber) === String(level));
 
 	function closeInfo(){
 		setShowInfo(false);
 	}
+
+
+	if (!levelInfo) {
+        return <div>Level not found</div>;
+    }
 
 	return (
 		<div className="level-component">
