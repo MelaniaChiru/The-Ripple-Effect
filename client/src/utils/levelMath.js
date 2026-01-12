@@ -33,7 +33,7 @@ export function buildSolutionMap(solutions = []) {
 /**
  * find the target position for a tile
  * If it is listed in solutions, target = solutions position
- * else if the tile alr has fixed position in tiles[], target = tile.postion
+ * else if the tile alr has fixed position in tiles[], target = tile.position
  *else target = null --> ***IDK what to do it yet
  */
 export function getTargetPosition(tile, solutionMap) {
@@ -46,7 +46,7 @@ export function getTargetPosition(tile, solutionMap) {
     }
 
     // fixed tiles that have real pos from json file
-    const p = tile.postion;
+    const p = tile.position;
     if (Array.isArray(p) && p.length === 2 && !(p[0] === -1 && p[1] === -1)) {
       return p;
     }

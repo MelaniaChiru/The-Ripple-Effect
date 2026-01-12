@@ -37,19 +37,21 @@ function Grid({levelInfo, setCurrentPage}) {
 
     // Map type -> number of available (unplaced) tiles
     const computeCounts = () => {
-        const counts = {};
-        for (const t of levelTiles) {
-            const type = t.type;
-            const pos = t.position || { r: -1, c: -1 };
-            const r = pos.r ?? -1;
-            const c = pos.c ?? -1;
-            // treat as available if not placed within the 6x6 grid
-            if (r < 1 || c < 1 || r > GRID_SIZE || c > GRID_SIZE) {
-                counts[type] = (counts[type] || 0) + 1; // available to be placed
-            }
+    const counts = {};
+    for (const t of levelTiles) {
+        // Extract 'school' from 'school-1'
+        const type = t.name.split('-')[0]; 
+        const pos = t.position || t.postion || { r: -1, c: -1 }; // Handle both spellings just in case
+        
+        const r = Array.isArray(pos) ? pos[0] : (pos.r ?? -1);
+        const c = Array.isArray(pos) ? pos[1] : (pos.c ?? -1);
+
+        if (r < 1 || c < 1) {
+            counts[type] = (counts[type] || 0) + 1;
         }
-        return counts;
-    }; 
+    }
+    return counts;
+}; 
 
     // helper to map a type to an image asset (fallback to House)
     const getImageForType = (type) => {
@@ -71,20 +73,27 @@ function Grid({levelInfo, setCurrentPage}) {
     };
 
     const seededTiles = initialTiles.map((cell, idx) => {
-        const r = Math.floor(idx / cols) + 1;
-        const c = (idx % cols) + 1;
-        // find a level tile that has this position
-        const match = levelTiles.find((lt) => (lt.position?.r === r && lt.position?.c === c));
-        if (match) {
-            return {
-                ...cell,
-                type: match.type,
-                imgPath: getImageForType(match.type),
-                fixed: true,
-            };
-        }
-        return cell;
+    const r = Math.floor(idx / cols) + 1;
+    const c = (idx % cols) + 1;
+    
+    const match = levelTiles.find((lt) => {
+        const p = lt.position || lt.postion;
+        const pr = Array.isArray(p) ? p[0] : p?.r;
+        const pc = Array.isArray(p) ? p[1] : p?.c;
+        return pr === r && pc === c;
     });
+
+    if (match) {
+        const type = match.name.split('-')[0];
+        return {
+            ...cell,
+            type: type,
+            imgPath: getImageForType(type),
+            fixed: true,
+        };
+    }
+    return cell;
+});
 
     const [tiles, setTiles] = useState(seededTiles);
     const [counts, setCounts] = useState(computeCounts());
@@ -229,7 +238,7 @@ function Grid({levelInfo, setCurrentPage}) {
         // happiness: parks/schools/factories/bus/recycle/garden/skyscraper/jet affect houses in radius; golf adds a global happiness bonus
         for (const t of tiles) {
             if (!t.type) continue;
-            const def = levelTiles.find((lt) => lt.type === t.type);
+            const def = levelTiles.find((lt) => lt.name.split('-')[0] === t.type);
             if (!def || !def.effect) continue;
 
             if (t.type === 'golf') {
