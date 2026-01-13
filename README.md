@@ -47,3 +47,11 @@ You can play the latest version of the game [`here`](https://ripple.melaniachiru
 ## 🏗️ Future Improvements
 * **Cross-Browser radius hover-highlight:** Refactor the system to ensure a consistent hover experience all browsers (Chrome, Safari, etc.) not just Firefox.
 * **Save & Resume:** Implement persistent state to allow players to leave a level and return exactly where they left off.
+
+## Attributions & Acknowledgements
+* Icons & Images: [The Thiings Collection](https://www.thiings.co/things)
+* Co-developers: [Ash Rebelo](https://github.com/ashrebelo) & [Sungeun Kim](https://github.com/SungeunKim01)
+
+
+
+
